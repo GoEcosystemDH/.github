@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "Tareas en Azure DevOps"
+    url: "https://dev.azure.com/goecosystem/Go-Devops/_workitems/"
+    about: "Para crear o consultar tasks, user stories y epics, usa Azure DevOps"
+  - name: "Wiki GoEcosystemDH"
+    url: "https://github.com/GoEcosystemDH/wiki"
+    about: "Consulta la documentación técnica y guías en nuestra Wiki"
