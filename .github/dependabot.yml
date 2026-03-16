@@ -1,0 +1,23 @@
+# Configuración de Dependabot para GoEcosystemDH
+# Este archivo sirve como template base.
+# Cada repo debe tener su propio dependabot.yml adaptado a su stack.
+#
+# Documentación: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates
+
+version: 2
+updates:
+  # GitHub Actions — mantener actions actualizadas
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "08:00"
+      timezone: "America/Bogota"
+    labels:
+      - "dependabot"
+      - "ci"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    open-pull-requests-limit: 5
