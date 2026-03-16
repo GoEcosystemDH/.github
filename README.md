@@ -1,3 +1,4 @@
+[![Board Status](https://dev.azure.com/goecosystem/e2a0dcc4-b0e3-4bd5-95c7-eddf5dd341b3/c543c47e-2ebf-449c-b4bf-f9caf5990811/_apis/work/boardbadge/48e2da7d-668b-43a7-b2d3-bd23a884d66b)](https://dev.azure.com/goecosystem/e2a0dcc4-b0e3-4bd5-95c7-eddf5dd341b3/_boards/board/t/c543c47e-2ebf-449c-b4bf-f9caf5990811/Microsoft.RequirementCategory)
 # .github — GoEcosystemDH
 
 Repositorio organizacional con templates, guías y configuración global para todos los repos de [GoEcosystemDH](https://github.com/GoEcosystemDH).
