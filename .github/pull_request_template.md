@@ -1,19 +1,28 @@
 ## Que hace este PR?
 
-<!-- Explica el cambio en 1-3 lineas -->
+<!-- Una linea -->
 
 ## Task
 
-<!-- Pega el link al work item de Azure DevOps -->
-
 https://dev.azure.com/goecosystem/Go-Devops/_workitems/edit/
+
+## Tipo de cambio
+
+- [ ] feat - Nueva funcionalidad
+- [ ] fix - Correccion de bug
+- [ ] refactor - Refactorizacion
+- [ ] docs / chore / ci
 
 ## Como probarlo?
 
-<!-- Pasos para que el reviewer pueda verificar el cambio -->
-
 1.
 
-## Algo mas?
+## Checklist
 
-<!-- Screenshots, notas, breaking changes, o dejalo vacio -->
+- [ ] Funciona en local
+- [ ] No rompe lo existente
+- [ ] Sin secrets ni logs de debug en el codigo
+
+## Screenshots
+
+<!-- Si aplica, sino borra esta seccion -->
