@@ -12,6 +12,8 @@ https://ecodigital.portubien.co/front/ticket.form.php?id=0000
 - [ ] feat - Nueva funcionalidad
 - [ ] fix - Correccion de bug
 - [ ] refactor - Refactorizacion
+- [ ] test - Tests nuevos o actualizados
+- [ ] perf - Mejora de rendimiento
 - [ ] docs / chore / ci
 
 ## Como probarlo?
