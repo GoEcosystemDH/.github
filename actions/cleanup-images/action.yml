@@ -1,0 +1,22 @@
+name: "Cleanup Docker Images"
+description: "Eliminar imágenes Docker locales después del build/push para liberar espacio"
+
+inputs:
+  image-tags:
+    description: "Tags de imágenes a eliminar (separados por espacio)"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Eliminar imágenes locales
+      shell: bash
+      run: |
+        for tag in ${{ inputs.image-tags }}; do
+          docker rmi "$tag" 2>/dev/null && echo "Eliminada: $tag" || echo "No encontrada: $tag"
+        done
+
+    - name: Limpiar imágenes huérfanas
+      shell: bash
+      run: |
+        docker image prune -f --filter "until=24h" 2>/dev/null || true
