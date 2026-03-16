@@ -1,0 +1,103 @@
+name: Docker CI/CD Multi-Sede
+
+on:
+  push:
+    branches: ["main", "develop"]
+  pull_request:
+    branches: ["main", "develop"]
+
+env:
+  DOCKER_REGISTRY: docker.io
+  DOCKER_IMAGE_NAME: $default-value$
+  COMPOSE_FILE: docker-compose.yml
+
+jobs:
+  build:
+    name: Build Docker Image
+    runs-on: [self-hosted, ci]
+    outputs:
+      tag_commit: ${{ steps.set-tags.outputs.tag_commit }}
+      tag_latest: ${{ steps.set-tags.outputs.tag_latest }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Generar tags de imagen
+        id: set-tags
+        run: |
+          TAG_LATEST="${{ env.DOCKER_REGISTRY }}/${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:latest"
+          TAG_COMMIT="${{ env.DOCKER_REGISTRY }}/${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ github.ref_name }}-${{ github.sha }}"
+          echo "tag_commit=$TAG_COMMIT" >> "$GITHUB_OUTPUT"
+          echo "tag_latest=$TAG_LATEST" >> "$GITHUB_OUTPUT"
+
+      - name: Build imagen Docker
+        run: |
+          docker build -t "${{ steps.set-tags.outputs.tag_commit }}" -t "${{ steps.set-tags.outputs.tag_latest }}" .
+
+  publish:
+    name: Publicar imagen a Docker Hub
+    if: github.event_name == 'push'
+    needs: build
+    runs-on: [self-hosted, ci]
+    steps:
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Push imagen
+        run: |
+          docker push "${{ needs.build.outputs.tag_commit }}"
+          docker push "${{ needs.build.outputs.tag_latest }}"
+
+  deploy:
+    name: Deploy ${{ matrix.sede }}
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: publish
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - sede: sede-1
+            environment: production-sede1
+            runner: cd
+            compose_project: app-sede1
+          - sede: sede-2
+            environment: production-sede2
+            runner: cd
+            compose_project: app-sede2
+    environment: ${{ matrix.environment }}
+    runs-on: [self-hosted, ${{ matrix.runner }}]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Actualizar imagen en compose
+        run: |
+          sed -i "s|image: .*|image: ${{ needs.publish.outputs.tag_commit }}|g" "${{ env.COMPOSE_FILE }}"
+
+      - name: Redesplegar servicio
+        run: |
+          docker compose -p "${{ matrix.compose_project }}" -f "${{ env.COMPOSE_FILE }}" down
+          docker compose -p "${{ matrix.compose_project }}" -f "${{ env.COMPOSE_FILE }}" up -d
+
+  cleanup:
+    name: Limpiar imagenes locales
+    if: github.event_name == 'push'
+    needs: deploy
+    runs-on: [self-hosted, ci]
+    steps:
+      - name: Eliminar imagenes locales
+        run: |
+          docker rmi "${{ needs.build.outputs.tag_commit }}" "${{ needs.build.outputs.tag_latest }}" || true
