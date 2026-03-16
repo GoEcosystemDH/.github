@@ -14,7 +14,9 @@
 Si descubres una vulnerabilidad de seguridad en alguno de nuestros repositorios:
 
 1. **NO** crees un Issue público.
-2. Envía un reporte directamente al equipo de DevOps.
+2. Reporta por uno de estos canales:
+   - **Email:** comunicados@goecosystemdh.com
+   - **Microsoft Teams:** Canal del equipo de DevOps
 3. Incluye:
    - Descripción de la vulnerabilidad
    - Pasos para reproducirla
@@ -40,6 +42,17 @@ Todos los colaboradores deben seguir estas prácticas:
 - **Inputs:** Validar toda entrada de usuario. Usar consultas parametrizadas para SQL.
 - **HTTPS:** Toda comunicación con APIs externas debe ser sobre HTTPS.
 - **Acceso:** Principio de menor privilegio. Solicitar solo los permisos necesarios.
+
+## Proceso de Respuesta a Alertas
+
+1. **Deteccion:** Dependabot o CodeQL genera la alerta automaticamente
+2. **Triaje:** El responsable del repo evalua severidad e impacto
+3. **Fix:** Se crea branch `hotfix/security-*`, se aplica el parche
+4. **Review:** PR con revision obligatoria antes de merge
+5. **Deploy:** Se despliega a produccion segun el SLA de la severidad
+6. **Cierre:** Se cierra la alerta en GitHub y se documenta en AzDO
+
+Para la guia detallada de triaje y responsables por repo, consulta la [Wiki de Onboarding](https://wiki.goecosystemdh.com/s/onboarding).
 
 ## Herramientas de Seguridad Activas
 
