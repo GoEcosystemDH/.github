@@ -1,0 +1,6 @@
+{
+  "name": "Docker CI/CD",
+  "description": "Pipeline estándar de GoEcosystemDH: build Docker, push a Docker Hub y deploy con docker-compose en self-hosted runners.",
+  "iconName": "docker",
+  "categories": ["Docker", "CI/CD", "Deployment"]
+}
