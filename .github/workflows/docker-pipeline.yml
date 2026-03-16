@@ -1,0 +1,96 @@
+name: "Pipeline Docker CI/CD Reutilizable"
+
+# Workflow reutilizable: cualquier repo puede llamarlo con workflow_call
+# Uso en un repo:
+#   jobs:
+#     deploy:
+#       uses: GoEcosystemDH/.github/.github/workflows/docker-pipeline.yml@main
+#       with:
+#         image-name: mi_imagen
+#         compose-name: mi_servicio
+#       secrets: inherit
+
+on:
+  workflow_call:
+    inputs:
+      image-name:
+        description: "Nombre de la imagen Docker"
+        required: true
+        type: string
+      compose-name:
+        description: "Nombre del proyecto docker-compose"
+        required: true
+        type: string
+      compose-file:
+        description: "Ruta al docker-compose.yml"
+        required: false
+        type: string
+        default: "docker-compose.yml"
+      runner-ci:
+        description: "Labels del runner para CI"
+        required: false
+        type: string
+        default: "self-hosted, ci"
+      runner-cd:
+        description: "Labels del runner para CD"
+        required: false
+        type: string
+        default: "self-hosted, cd"
+
+jobs:
+  build-and-push:
+    name: Build y Push imagen Docker
+    runs-on: [ self-hosted, ci ]
+    outputs:
+      tag-commit: ${{ steps.docker-setup.outputs.tag-commit }}
+      tag-latest: ${{ steps.docker-setup.outputs.tag-latest }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Docker
+        id: docker-setup
+        uses: GoEcosystemDH/.github/actions/setup-docker@main
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+          image-name: ${{ inputs.image-name }}
+
+      - name: Build imagen
+        run: |
+          docker build \
+            -t "${{ steps.docker-setup.outputs.tag-commit }}" \
+            -t "${{ steps.docker-setup.outputs.tag-latest }}" \
+            .
+
+      - name: Push imagen a Docker Hub
+        run: |
+          docker push "${{ steps.docker-setup.outputs.tag-commit }}"
+          docker push "${{ steps.docker-setup.outputs.tag-latest }}"
+
+  deploy:
+    name: Deploy con Docker Compose
+    needs: build-and-push
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: [ self-hosted, cd ]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy
+        uses: GoEcosystemDH/.github/actions/deploy-compose@main
+        with:
+          compose-file: ${{ inputs.compose-file }}
+          compose-name: ${{ inputs.compose-name }}
+          image-tag: ${{ needs.build-and-push.outputs.tag-commit }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+  cleanup:
+    name: Limpiar imágenes locales
+    needs: [build-and-push, deploy]
+    if: always()
+    runs-on: [ self-hosted, ci ]
+    steps:
+      - name: Cleanup
+        uses: GoEcosystemDH/.github/actions/cleanup-images@main
+        with:
+          image-tags: "${{ needs.build-and-push.outputs.tag-commit }} ${{ needs.build-and-push.outputs.tag-latest }}"
