@@ -1,0 +1,50 @@
+name: "Limpieza de Issues y PRs Inactivos"
+
+on:
+  schedule:
+    # Ejecutar todos los lunes a las 7:00 AM Colombia
+    - cron: "0 12 * * 1"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  stale:
+    name: Marcar y cerrar items inactivos
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v9
+        with:
+          # Issues
+          days-before-issue-stale: 60
+          days-before-issue-close: 30
+          stale-issue-label: "stale"
+          stale-issue-message: |
+            Este issue lleva 60 días sin actividad y ha sido marcado como **stale**.
+            Si el issue sigue siendo relevante, agrega un comentario para mantenerlo abierto.
+            Se cerrará automáticamente en 30 días si no hay actividad.
+          close-issue-message: |
+            Este issue fue cerrado automáticamente por inactividad (90 días sin actividad).
+            Si el problema persiste, puedes reabrir este issue o crear uno nuevo.
+
+          # Pull Requests
+          days-before-pr-stale: 30
+          days-before-pr-close: 14
+          stale-pr-label: "stale"
+          stale-pr-message: |
+            Este Pull Request lleva 30 días sin actividad y ha sido marcado como **stale**.
+            Si el PR sigue siendo necesario, agrega un comentario o haz push de cambios.
+            Se cerrará automáticamente en 14 días si no hay actividad.
+          close-pr-message: |
+            Este PR fue cerrado automáticamente por inactividad (44 días sin actividad).
+            Si los cambios siguen siendo necesarios, puedes reabrir este PR.
+
+          # Excepciones - no marcar como stale si tienen estos labels
+          exempt-issue-labels: "pinned,security,bug-critico"
+          exempt-pr-labels: "pinned,security,en-revision"
+
+          # Configuración general
+          remove-stale-when-updated: true
+          operations-per-run: 100
