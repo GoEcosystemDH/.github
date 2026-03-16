@@ -1,0 +1,56 @@
+name: "Solicitud de Funcionalidad"
+description: "Proponer una nueva funcionalidad o mejora"
+title: "[FEATURE]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe la funcionalidad que necesitas. Asegúrate de que exista un work item en Azure DevOps antes de iniciar desarrollo.
+  - type: input
+    id: task-azdo
+    attributes:
+      label: "Task Azure DevOps"
+      description: "Link al work item relacionado en Azure DevOps"
+      placeholder: "https://dev.azure.com/goecosystem/Go-Devops/_workitems/edit/XXXX"
+    validations:
+      required: false
+  - type: textarea
+    id: problema
+    attributes:
+      label: "Problema o Necesidad"
+      description: "¿Qué problema resuelve esta funcionalidad?"
+      placeholder: "Actualmente no es posible... y esto causa..."
+    validations:
+      required: true
+  - type: textarea
+    id: solucion
+    attributes:
+      label: "Solución Propuesta"
+      description: "Describe cómo debería funcionar"
+    validations:
+      required: true
+  - type: textarea
+    id: alternativas
+    attributes:
+      label: "Alternativas Consideradas"
+      description: "¿Has considerado otras formas de resolver esto?"
+    validations:
+      required: false
+  - type: dropdown
+    id: prioridad
+    attributes:
+      label: "Prioridad"
+      options:
+        - Alta (bloquea trabajo actual)
+        - Media (mejora significativa)
+        - Baja (nice to have)
+    validations:
+      required: true
+  - type: textarea
+    id: contexto
+    attributes:
+      label: "Contexto Adicional"
+      description: "Capturas, diagramas, referencias o cualquier información adicional"
+    validations:
+      required: false
