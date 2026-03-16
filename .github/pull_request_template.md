@@ -2,9 +2,10 @@
 
 <!-- Una linea -->
 
-## Task
+## Task o ticket
 
-https://dev.azure.com/goecosystem/Go-Devops/_workitems/edit/
+https://dev.azure.com/goecosystem/project/_workitems/edit/
+https://ecodigital.portubien.co/front/ticket.form.php?id=0000
 
 ## Tipo de cambio
 
