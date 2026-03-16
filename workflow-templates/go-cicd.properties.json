@@ -1,0 +1,6 @@
+{
+  "name": "Go CI/CD",
+  "description": "Pipeline Go: golangci-lint, go test con coverage, go build, Docker build+push y deploy con docker-compose.",
+  "iconName": "go",
+  "categories": ["Go", "CI/CD", "Docker", "Deployment"]
+}
