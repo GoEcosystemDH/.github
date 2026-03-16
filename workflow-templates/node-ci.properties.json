@@ -1,0 +1,6 @@
+{
+  "name": "Node.js / Angular CI",
+  "description": "Pipeline CI para proyectos Node.js y Angular: install, lint, build, test.",
+  "iconName": "nodejs",
+  "categories": ["Node.js", "Angular", "CI"]
+}
