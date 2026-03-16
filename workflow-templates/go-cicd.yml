@@ -1,0 +1,116 @@
+name: Go CI/CD
+
+on:
+  push:
+    branches: ["main", "develop"]
+  pull_request:
+    branches: ["main", "develop"]
+
+env:
+  GO_VERSION: "1.22"
+  DOCKER_REGISTRY: docker.io
+  DOCKER_IMAGE_NAME: $default-value$
+  COMPOSE_FILE: docker-compose.yml
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: [self-hosted, ci]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Go vet
+        run: go vet ./...
+
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: latest
+
+  test:
+    name: Test
+    runs-on: [self-hosted, ci]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Run tests
+        run: go test ./... -race -coverprofile=coverage.out -covermode=atomic
+
+      - name: Coverage report
+        run: go tool cover -func=coverage.out
+
+  build:
+    name: Build
+    needs: [lint, test]
+    runs-on: [self-hosted, ci]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Build binario
+        run: go build -o bin/app ./cmd/
+
+  docker:
+    name: Docker Build & Push
+    if: github.event_name == 'push'
+    needs: build
+    runs-on: [self-hosted, ci]
+    outputs:
+      tag_commit: ${{ steps.set-tags.outputs.tag_commit }}
+      tag_latest: ${{ steps.set-tags.outputs.tag_latest }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Generar tags
+        id: set-tags
+        run: |
+          TAG_LATEST="${{ env.DOCKER_REGISTRY }}/${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:latest"
+          TAG_COMMIT="${{ env.DOCKER_REGISTRY }}/${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ github.ref_name }}-${{ github.sha }}"
+          echo "tag_commit=$TAG_COMMIT" >> "$GITHUB_OUTPUT"
+          echo "tag_latest=$TAG_LATEST" >> "$GITHUB_OUTPUT"
+
+      - name: Build y push
+        run: |
+          docker build -t "${{ steps.set-tags.outputs.tag_commit }}" -t "${{ steps.set-tags.outputs.tag_latest }}" .
+          docker push "${{ steps.set-tags.outputs.tag_commit }}"
+          docker push "${{ steps.set-tags.outputs.tag_latest }}"
+
+  deploy:
+    name: Deploy
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: docker
+    runs-on: [self-hosted, cd]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Actualizar imagen en compose
+        run: |
+          sed -i "s|image: .*|image: ${{ needs.docker.outputs.tag_commit }}|g" "${{ env.COMPOSE_FILE }}"
+
+      - name: Redesplegar servicio
+        run: |
+          docker compose -f "${{ env.COMPOSE_FILE }}" down
+          docker compose -f "${{ env.COMPOSE_FILE }}" up -d
