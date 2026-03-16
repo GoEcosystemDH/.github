@@ -1,0 +1,41 @@
+# Configuración de auto-labeler
+# Asigna labels automáticamente según archivos modificados en PRs
+
+docker:
+  - changed-files:
+    - any-glob-to-any-file:
+      - "Dockerfile*"
+      - "docker-compose*.yml"
+      - ".dockerignore"
+
+ci-cd:
+  - changed-files:
+    - any-glob-to-any-file:
+      - ".github/workflows/**"
+      - ".github/actions/**"
+
+documentacion:
+  - changed-files:
+    - any-glob-to-any-file:
+      - "**/*.md"
+      - "docs/**"
+      - "wiki/**"
+
+dependencias:
+  - changed-files:
+    - any-glob-to-any-file:
+      - "package.json"
+      - "package-lock.json"
+      - "go.mod"
+      - "go.sum"
+      - "requirements.txt"
+      - "Pipfile"
+
+configuracion:
+  - changed-files:
+    - any-glob-to-any-file:
+      - "*.yml"
+      - "*.yaml"
+      - "*.json"
+      - "*.toml"
+      - ".env.example"
