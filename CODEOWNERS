@@ -1,0 +1,11 @@
+# CODEOWNERS - .github
+# Owners son notificados automaticamente para review en PRs
+
+# Default: equipo principal
+* @GoEcosystemDH/devops-infra
+
+# Infraestructura y CI/CD
+Dockerfile @GoEcosystemDH/devops-infra
+docker-compose.yml @GoEcosystemDH/devops-infra
+.github/ @GoEcosystemDH/devops-infra
+.gitlab-ci.yml @GoEcosystemDH/devops-infra
