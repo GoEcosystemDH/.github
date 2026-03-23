@@ -45,7 +45,7 @@ jobs:
       tag-commit: ${{ steps.docker-setup.outputs.tag-commit }}
       tag-latest: ${{ steps.docker-setup.outputs.tag-latest }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup Docker
         id: docker-setup
@@ -73,7 +73,7 @@ jobs:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: [ self-hosted, cd ]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Deploy
         uses: GoEcosystemDH/.github/actions/deploy-compose@main
