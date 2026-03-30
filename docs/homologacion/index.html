@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tabla de Homologacion — GoEcosystemDH</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -124,84 +125,96 @@
   }
   .callout strong { color: #e6edf3; }
 
-  /* Steps box */
-  .steps-box {
+  /* Tabs */
+  .tabs {
     background: #161b22;
     border: 1px solid #30363d;
     border-radius: 10px;
-    padding: 24px 28px;
+    overflow: hidden;
     margin: 16px 0;
   }
-  .step {
-    margin-bottom: 20px;
+  .tab-nav {
+    display: flex;
+    border-bottom: 1px solid #30363d;
+    overflow-x: auto;
   }
-  .step:last-child { margin-bottom: 0; }
-  .step-number {
-    display: inline-block;
-    background: #58a6ff;
-    color: #0d1117;
-    font-weight: 700;
-    font-size: 12px;
-    width: 24px;
-    height: 24px;
-    line-height: 24px;
-    text-align: center;
-    border-radius: 50%;
-    margin-right: 8px;
-    vertical-align: middle;
+  .tab-btn {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 16px;
+    background: transparent;
+    border: none;
+    color: #8b949e;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: color .15s, border-color .15s, background .15s;
+    white-space: nowrap;
   }
-  .step-title {
+  .tab-btn:hover { color: #e6edf3; background: rgba(88, 166, 255, .05); }
+  .tab-btn.active {
+    color: #58a6ff;
+    border-bottom-color: #58a6ff;
+    background: rgba(88, 166, 255, .08);
+  }
+  .tab-panel {
+    display: none;
+    padding: 24px 28px;
+  }
+  .tab-panel.active { display: block; }
+  .tab-panel .panel-title {
     font-size: 14px;
     font-weight: 600;
     color: #e6edf3;
-    vertical-align: middle;
+    margin-bottom: 8px;
   }
-  .step-desc {
+  .tab-panel .panel-desc {
     font-size: 13px;
     color: #8b949e;
-    margin: 6px 0 8px 32px;
+    margin-bottom: 14px;
   }
 
   /* Code blocks */
+  .code-wrap {
+    position: relative;
+    margin: 6px 0;
+  }
   pre {
     background: #0d1117;
     border: 1px solid #30363d;
     border-radius: 6px;
-    padding: 12px 16px;
+    padding: 12px 48px 12px 16px;
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
     font-size: 13px;
     color: #e6edf3;
     overflow-x: auto;
-    margin: 6px 0 6px 32px;
     line-height: 1.5;
   }
   pre .comment { color: #8b949e; }
-
-  /* Column explanation list */
-  .column-list {
-    list-style: none;
-    padding: 0;
-    margin: 12px 0;
+  .copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #21262d;
+    border: 1px solid #30363d;
+    color: #8b949e;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: color .15s, background .15s;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
-  .column-list li {
-    padding: 10px 14px;
-    border-left: 3px solid #30363d;
-    margin-bottom: 8px;
-    font-size: 13px;
-    background: #161b22;
-    border-radius: 0 6px 6px 0;
-  }
-  .column-list li strong {
-    color: #58a6ff;
-    display: inline;
-  }
+  .copy-btn:hover { color: #e6edf3; background: #30363d; }
+  .copy-btn.copied { color: #3fb950; }
 
   /* Links section */
   .links-row {
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
-    margin: 16px 0 8px 32px;
+    margin: 16px 0 8px;
   }
   .link-pill {
     display: inline-flex;
@@ -220,6 +233,39 @@
   .link-pill:hover {
     background: rgba(88, 166, 255, .2);
     text-decoration: none;
+  }
+
+  /* Search */
+  .search-wrap {
+    margin: 16px 0;
+    position: relative;
+  }
+  .search-wrap svg {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #484f58;
+    pointer-events: none;
+  }
+  #repo-search {
+    width: 100%;
+    padding: 10px 16px 10px 40px;
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    color: #e6edf3;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color .15s;
+  }
+  #repo-search::placeholder { color: #484f58; }
+  #repo-search:focus { border-color: #58a6ff; }
+  .search-count {
+    font-size: 12px;
+    color: #8b949e;
+    margin-top: 6px;
   }
 
   /* Table */
@@ -243,7 +289,49 @@
     position: sticky;
     top: 0;
     border-bottom: 2px solid #30363d;
+    white-space: nowrap;
   }
+  th .th-inner {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .tooltip-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #30363d;
+    color: #8b949e;
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .15s, color .15s;
+    flex-shrink: 0;
+    border: none;
+    font-family: inherit;
+    line-height: 1;
+  }
+  .tooltip-icon:hover { background: #484f58; color: #e6edf3; }
+  .tooltip-box {
+    display: none;
+    position: absolute;
+    z-index: 10;
+    background: #1c2128;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 400;
+    color: #c9d1d9;
+    max-width: 280px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.4);
+    line-height: 1.5;
+    white-space: normal;
+  }
+  .tooltip-box.visible { display: block; }
   td {
     padding: 8px 12px;
     color: #c9d1d9;
@@ -251,6 +339,13 @@
   }
   tr:hover td { background: #161b22; }
   tbody tr:last-child td { border-bottom: none; }
+  .no-results {
+    text-align: center;
+    padding: 24px;
+    color: #8b949e;
+    font-size: 14px;
+    display: none;
+  }
 
   /* Links */
   a { color: #58a6ff; text-decoration: none; }
@@ -297,6 +392,18 @@
   }
   .bullet-list li { margin-bottom: 6px; }
 
+  /* Mermaid chart */
+  .chart-section {
+    margin: 24px 0;
+  }
+  .mermaid {
+    display: flex;
+    justify-content: center;
+  }
+  .mermaid svg {
+    max-width: 100%;
+  }
+
   /* Footer */
   .footer {
     text-align: center;
@@ -309,10 +416,12 @@
   .footer a { color: #58a6ff; }
   .footer-nav {
     display: flex;
-    justify-content: center;
-    gap: 16px;
-    flex-wrap: wrap;
+    justify-content: space-between;
     margin-bottom: 10px;
+  }
+  .footer-nav a {
+    font-weight: 600;
+    font-size: 13px;
   }
 
   /* Responsive */
@@ -320,9 +429,9 @@
     .stats { flex-direction: column; }
     .container { padding: 20px 16px 36px; }
     h1 { font-size: 22px; }
-    pre { margin-left: 0; font-size: 12px; }
-    .step-desc { margin-left: 0; }
-    .links-row { margin-left: 0; }
+    pre { font-size: 12px; }
+    .tab-btn { font-size: 12px; padding: 10px 12px; }
+    .footer-nav { flex-direction: column; gap: 8px; align-items: center; }
   }
 </style>
 </head>
@@ -363,80 +472,113 @@
     </div>
   </div>
 
+  <!-- Mermaid pie chart -->
+  <div class="chart-section">
+    <pre class="mermaid">
+    %%{init: {'theme': 'dark', 'themeVariables': { 'pie1': '#3fb950', 'pie2': '#d29922', 'pieTitleTextColor': '#e6edf3', 'pieSectionTextColor': '#e6edf3', 'pieLegendTextColor': '#c9d1d9', 'pieOuterStrokeColor': '#30363d' }}}%%
+    pie title Estado de Migracion
+      "Migrados (37)" : 37
+      "Archivo historico (54)" : 54
+    </pre>
+  </div>
+
   <!-- ============================================================ -->
-  <!-- SECTION 2: Que necesito hacer -->
+  <!-- SECTION 2: Que necesito hacer (Tabs) -->
   <!-- ============================================================ -->
   <h2>&iquest;Que necesito hacer?</h2>
 
-  <div class="steps-box">
-
-    <div class="step">
-      <span class="step-number">1</span>
-      <span class="step-title">Si ya tenias el repo clonado desde GitLab, actualiza el remote:</span>
-      <p class="step-desc">Esto le dice a Git que ahora el codigo vive en GitHub. No pierdes nada local.</p>
-      <pre>git remote set-url origin https://github.com/GoEcosystemDH/<span class="comment">NOMBRE-REPO</span>.git</pre>
+  <div class="tabs">
+    <div class="tab-nav">
+      <button class="tab-btn active" data-tab="tab-clone-existing">Ya tenia el repo clonado</button>
+      <button class="tab-btn" data-tab="tab-first-time">Es mi primera vez</button>
+      <button class="tab-btn" data-tab="tab-find-repo">No se cual es mi repo</button>
     </div>
 
-    <div class="step">
-      <span class="step-number">2</span>
-      <span class="step-title">Si es la primera vez, clona desde GitHub:</span>
-      <pre>git clone https://github.com/GoEcosystemDH/<span class="comment">NOMBRE-REPO</span>.git</pre>
-    </div>
-
-    <div class="step">
-      <span class="step-number">3</span>
-      <span class="step-title">Verifica que apunta al lugar correcto:</span>
-      <pre>git remote -v
+    <!-- Tab 1: Already had the repo cloned from GitLab -->
+    <div id="tab-clone-existing" class="tab-panel active">
+      <div class="panel-title">Actualiza el remote de tu clon local</div>
+      <div class="panel-desc">Esto le dice a Git que ahora el codigo vive en GitHub. No pierdes nada local.</div>
+      <div class="code-wrap">
+        <pre>git remote set-url origin https://github.com/GoEcosystemDH/<span class="comment">NOMBRE-REPO</span>.git</pre>
+        <button class="copy-btn" aria-label="Copiar comando">Copiar</button>
+      </div>
+      <div class="panel-desc" style="margin-top: 14px;">Verifica que apunta al lugar correcto:</div>
+      <div class="code-wrap">
+        <pre>git remote -v
 <span class="comment"># Deberia mostrar:
 # origin  https://github.com/GoEcosystemDH/NOMBRE-REPO.git (fetch)
 # origin  https://github.com/GoEcosystemDH/NOMBRE-REPO.git (push)</span></pre>
+        <button class="copy-btn" aria-label="Copiar comando">Copiar</button>
+      </div>
+      <p style="font-size:13px; color:#8b949e; margin-top: 12px;">Reemplaza <code style="color:#d29922">NOMBRE-REPO</code> con el nombre que aparece en la columna "Repo GitHub" de la tabla.</p>
     </div>
 
-    <div class="step">
-      <span class="step-title">Reemplaza <code style="color:#d29922">NOMBRE-REPO</code> con el nombre que aparece en la columna "Repo GitHub" de la tabla.</span>
+    <!-- Tab 2: First time with this repo -->
+    <div id="tab-first-time" class="tab-panel">
+      <div class="panel-title">Clona directamente desde GitHub</div>
+      <div class="panel-desc">Si nunca has trabajado con este repo, solo necesitas clonarlo.</div>
+      <div class="code-wrap">
+        <pre>git clone https://github.com/GoEcosystemDH/<span class="comment">NOMBRE-REPO</span>.git</pre>
+        <button class="copy-btn" aria-label="Copiar comando">Copiar</button>
+      </div>
+      <p style="font-size:13px; color:#8b949e; margin-top: 12px;">Reemplaza <code style="color:#d29922">NOMBRE-REPO</code> con el nombre que aparece en la columna "Repo GitHub" de la tabla.</p>
     </div>
 
+    <!-- Tab 3: Don't know which repo -->
+    <div id="tab-find-repo" class="tab-panel">
+      <div class="panel-title">Busca tu repo en la tabla</div>
+      <div class="panel-desc">Usa el buscador de la tabla de abajo para encontrar tu repositorio por nombre (GitLab o GitHub).</div>
+      <p style="font-size:13px;">
+        <a href="#repo-table-section" style="font-weight: 600;">Ir a la tabla de repositorios migrados</a> y escribe el nombre que recuerdes en el campo de busqueda. La tabla filtra en tiempo real.
+      </p>
+    </div>
   </div>
 
   <div class="callout-green">
     <strong>Siguiente paso:</strong> una vez actualizado el remote, revisa la guia completa y el checklist para asegurarte de que todo funciona bien.
   </div>
 
-  <div class="links-row" style="margin-left: 0;">
+  <div class="links-row">
     <a class="link-pill" href="https://wiki.goecosystemdh.com/s/onboarding/p/configuracion-del-entorno-oVSEjUzXB4">Configuracion del Entorno</a>
     <a class="link-pill" href="https://wiki.goecosystemdh.com/s/onboarding/p/checklist-de-validacion-post-migracion-ZVRX3eZMfE">Checklist Post-Migracion</a>
     <a class="link-pill" href="https://wiki.goecosystemdh.com/s/onboarding/p/flujo-de-trabajo-QAw78oyzDK">Flujo de Trabajo</a>
   </div>
 
   <!-- ============================================================ -->
-  <!-- SECTION 3: Que significan las columnas -->
+  <!-- SECTION 3: Tabla de 37 repos migrados -->
   <!-- ============================================================ -->
-  <h2>&iquest;Que significan las columnas?</h2>
+  <h2 id="repo-table-section">Repositorios Migrados (37)</h2>
 
-  <p>La tabla de abajo tiene cinco columnas. Esto es lo que significa cada una:</p>
-
-  <ul class="column-list">
-    <li><strong>Repo GitLab</strong> &mdash; El nombre original que tenia el repositorio en GitLab.</li>
-    <li><strong>Repo GitHub</strong> &mdash; El nuevo nombre en GitHub. Haz click en el enlace para ir directamente al repo.</li>
-    <li><strong>Rama</strong> &mdash; La rama principal del proyecto (main, master, develop, etc.).</li>
-    <li><strong>Pipeline</strong> &mdash; <span class="badge b-green">Si</span> = el repo tenia un proceso automatico de compilacion o despliegue (CI/CD) en GitLab. <span class="badge b-gray">No</span> = no tenia pipeline.</li>
-    <li><strong>CI/CD Migrado</strong> &mdash; <span class="badge b-green">Si</span> = ese proceso automatico ya funciona en GitHub Actions. <span class="badge b-gray">No</span> = aun se esta migrando o no aplica.</li>
-  </ul>
-
-  <!-- ============================================================ -->
-  <!-- SECTION 4: Tabla de 37 repos migrados -->
-  <!-- ============================================================ -->
-  <h2>Repositorios Migrados (37)</h2>
+  <div class="search-wrap">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M11.5 7a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Zm-.82 4.74a6 6 0 1 1 1.06-1.06l3.04 3.04a.75.75 0 1 1-1.06 1.06l-3.04-3.04Z"/></svg>
+    <input type="text" id="repo-search" placeholder="Buscar por nombre de repo (GitLab o GitHub)..." autocomplete="off">
+    <div class="search-count" id="search-count"></div>
+  </div>
 
   <div class="table-wrap">
-  <table>
+  <table id="repo-table">
   <thead>
   <tr>
-    <th>Repo GitLab</th>
-    <th>Repo GitHub</th>
-    <th>Rama</th>
-    <th>Pipeline</th>
-    <th>CI/CD Migrado</th>
+    <th title="El nombre original que tenia el repositorio en GitLab.">
+      <span class="th-inner">Repo GitLab <button class="tooltip-icon" data-tooltip="tooltip-gitlab" aria-label="Explicacion">?</button></span>
+      <div class="tooltip-box" id="tooltip-gitlab">El nombre original que tenia el repositorio en GitLab antes de la migracion.</div>
+    </th>
+    <th title="El nuevo nombre en GitHub. Haz click en el enlace para ir directamente al repo.">
+      <span class="th-inner">Repo GitHub <button class="tooltip-icon" data-tooltip="tooltip-github" aria-label="Explicacion">?</button></span>
+      <div class="tooltip-box" id="tooltip-github">El nuevo nombre en GitHub. Haz click en el enlace para ir directamente al repositorio.</div>
+    </th>
+    <th title="La rama principal del proyecto (main, master, develop, etc.).">
+      <span class="th-inner">Rama <button class="tooltip-icon" data-tooltip="tooltip-rama" aria-label="Explicacion">?</button></span>
+      <div class="tooltip-box" id="tooltip-rama">La rama principal del proyecto (main, master, develop, etc.).</div>
+    </th>
+    <th title="Si = el repo tenia un pipeline CI/CD en GitLab. No = no tenia pipeline.">
+      <span class="th-inner">Pipeline <button class="tooltip-icon" data-tooltip="tooltip-pipeline" aria-label="Explicacion">?</button></span>
+      <div class="tooltip-box" id="tooltip-pipeline"><strong>Si</strong> = el repo tenia un proceso automatico de compilacion o despliegue (CI/CD) en GitLab.<br><strong>No</strong> = no tenia pipeline.</div>
+    </th>
+    <th title="Si = el pipeline CI/CD ya funciona en GitHub Actions. No = aun se esta migrando o no aplica.">
+      <span class="th-inner">CI/CD Migrado <button class="tooltip-icon" data-tooltip="tooltip-cicd" aria-label="Explicacion">?</button></span>
+      <div class="tooltip-box" id="tooltip-cicd"><strong>Si</strong> = ese proceso automatico ya funciona en GitHub Actions.<br><strong>No</strong> = aun se esta migrando o no aplica.</div>
+    </th>
   </tr>
   </thead>
   <tbody>
@@ -480,9 +622,10 @@
   </tbody>
   </table>
   </div>
+  <div class="no-results" id="no-results">No se encontraron repositorios que coincidan con tu busqueda.</div>
 
   <!-- ============================================================ -->
-  <!-- SECTION 5: Repos NO migrados -->
+  <!-- SECTION 4: Repos NO migrados -->
   <!-- ============================================================ -->
   <h2>Repositorios que NO se migraron (Archivo Historico)</h2>
 
@@ -556,7 +699,7 @@
   </details>
 
   <!-- ============================================================ -->
-  <!-- SECTION 6: Repo no esta en la lista -->
+  <!-- SECTION 5: Repo no esta en la lista -->
   <!-- ============================================================ -->
   <h2>&iquest;Y si mi repo no esta en la lista?</h2>
 
@@ -572,7 +715,7 @@
     <strong>Consulta las Preguntas Frecuentes</strong> para resolver dudas comunes sobre la migracion, permisos, y flujo de trabajo.
   </div>
 
-  <div class="links-row" style="margin-left: 0;">
+  <div class="links-row">
     <a class="link-pill" href="https://wiki.goecosystemdh.com/s/onboarding/p/preguntas-frecuentes-oT901E42i8">Preguntas Frecuentes</a>
     <a class="link-pill" href="https://wiki.goecosystemdh.com/s/onboarding/p/convencion-de-nombres-para-repositorios-mvb98uiH6q">Convencion de Nombres</a>
     <a class="link-pill" href="https://wiki.goecosystemdh.com/s/onboarding/p/flujo-de-trabajo-QAw78oyzDK">Flujo de Trabajo</a>
@@ -581,17 +724,120 @@
   <!-- Footer -->
   <div class="footer">
     <div class="footer-nav">
-      <a href="../">&larr; Volver al Portal</a>
-      <span style="color:#30363d">&middot;</span>
-      <a href="https://wiki.goecosystemdh.com/s/onboarding/p/configuracion-del-entorno-oVSEjUzXB4">Configuracion del Entorno</a>
-      <span style="color:#30363d">&middot;</span>
-      <a href="https://wiki.goecosystemdh.com/s/onboarding/p/checklist-de-validacion-post-migracion-ZVRX3eZMfE">Checklist Post-Migracion</a>
-      <span style="color:#30363d">&middot;</span>
-      <a href="https://wiki.goecosystemdh.com/s/onboarding/p/preguntas-frecuentes-oT901E42i8">FAQ</a>
+      <a href="../">&larr; Portal</a>
+      <a href="https://wiki.goecosystemdh.com/s/onboarding/p/flujo-de-trabajo-QAw78oyzDK">Modelo de Trabajo &rarr;</a>
     </div>
     <p>GoEcosystemDH &mdash; Equipo DevOps &mdash; 2026</p>
   </div>
 
 </div>
+
+<script>
+  // ── Mermaid init ──
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    themeVariables: {
+      darkMode: true,
+      background: '#0d1117',
+      primaryColor: '#3fb950',
+      secondaryColor: '#d29922'
+    }
+  });
+
+  // ── Searchable table ──
+  (function() {
+    var input = document.getElementById('repo-search');
+    var table = document.getElementById('repo-table');
+    var rows = table.querySelectorAll('tbody tr');
+    var countEl = document.getElementById('search-count');
+    var noResults = document.getElementById('no-results');
+    var totalRows = rows.length;
+
+    input.addEventListener('input', function() {
+      var filter = this.value.toLowerCase();
+      var visible = 0;
+      rows.forEach(function(row) {
+        var text = row.textContent.toLowerCase();
+        var match = text.includes(filter);
+        row.style.display = match ? '' : 'none';
+        if (match) visible++;
+      });
+      if (filter.length > 0) {
+        countEl.textContent = visible + ' de ' + totalRows + ' repositorios';
+        noResults.style.display = visible === 0 ? 'block' : 'none';
+      } else {
+        countEl.textContent = '';
+        noResults.style.display = 'none';
+      }
+    });
+  })();
+
+  // ── Tabs ──
+  (function() {
+    var buttons = document.querySelectorAll('.tab-btn');
+    buttons.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var targetId = this.getAttribute('data-tab');
+        var tabs = this.closest('.tabs');
+        tabs.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+        tabs.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+        this.classList.add('active');
+        document.getElementById(targetId).classList.add('active');
+      });
+    });
+  })();
+
+  // ── Copy to clipboard ──
+  (function() {
+    document.querySelectorAll('.copy-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var pre = this.closest('.code-wrap').querySelector('pre');
+        var text = pre.textContent;
+        navigator.clipboard.writeText(text).then(function() {
+          btn.textContent = 'Copiado!';
+          btn.classList.add('copied');
+          setTimeout(function() {
+            btn.textContent = 'Copiar';
+            btn.classList.remove('copied');
+          }, 2000);
+        });
+      });
+    });
+  })();
+
+  // ── Tooltip icons ──
+  (function() {
+    var activeTooltip = null;
+
+    document.querySelectorAll('.tooltip-icon').forEach(function(icon) {
+      icon.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var tooltipId = this.getAttribute('data-tooltip');
+        var tooltip = document.getElementById(tooltipId);
+
+        if (activeTooltip && activeTooltip !== tooltip) {
+          activeTooltip.classList.remove('visible');
+        }
+
+        tooltip.classList.toggle('visible');
+        activeTooltip = tooltip.classList.contains('visible') ? tooltip : null;
+
+        // Position tooltip below the icon
+        var iconRect = this.getBoundingClientRect();
+        var thRect = this.closest('th').getBoundingClientRect();
+        tooltip.style.top = (this.offsetTop + this.offsetHeight + 8) + 'px';
+        tooltip.style.left = Math.max(0, this.offsetLeft - 40) + 'px';
+      });
+    });
+
+    document.addEventListener('click', function() {
+      if (activeTooltip) {
+        activeTooltip.classList.remove('visible');
+        activeTooltip = null;
+      }
+    });
+  })();
+</script>
 </body>
 </html>
