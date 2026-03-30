@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modelo de Trabajo en GitHub - GoEcosystemDH</title>
+<style>
+  @page { size: A3 portrait; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: #0d1117;
+    color: #e6edf3;
+    width: 1200px;
+    margin: 0 auto;
+    padding: 0;
+  }
+  .nav{display:flex;align-items:center;gap:8px;font-size:13px;color:#8b949e;padding:16px 48px 0;max-width:1200px;margin:0 auto}
+  .nav a{color:#58a6ff;text-decoration:none}
+  .nav a:hover{text-decoration:underline}
+  .infographic {
+    background: linear-gradient(180deg, #0d1117 0%, #161b22 100%);
+    padding: 48px;
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 32px;
+    border-bottom: 2px solid #30363d;
+  }
+  .header .logo {
+    font-size: 14px;
+    color: #8b949e;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .header h1 {
+    font-size: 36px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #58a6ff 0%, #3fb950 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  .header .subtitle {
+    color: #8b949e;
+    font-size: 16px;
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    margin-bottom: 40px;
+    padding: 24px;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat .value {
+    font-size: 40px;
+    font-weight: 800;
+    color: #58a6ff;
+  }
+  .stat .value.green { color: #3fb950; }
+  .stat .value.orange { color: #d29922; }
+  .stat .value.purple { color: #bc8cff; }
+  .stat .label {
+    font-size: 12px;
+    color: #8b949e;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+
+  /* SECTION */
+  .section {
+    margin-bottom: 36px;
+  }
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #e6edf3;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title .icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+  .icon-blue { background: #1f6feb; }
+  .icon-green { background: #238636; }
+  .icon-purple { background: #8957e5; }
+  .icon-orange { background: #9e6a03; }
+  .icon-red { background: #da3633; }
+
+  /* PLATFORMS */
+  .platforms {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+  .platform-card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    transition: border-color 0.2s;
+  }
+  .platform-card:hover { border-color: #58a6ff; }
+  .platform-card .name {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .platform-card .url {
+    font-size: 13px;
+    color: #58a6ff;
+    margin-bottom: 8px;
+  }
+  .platform-card .desc {
+    font-size: 12px;
+    color: #8b949e;
+  }
+
+  /* FLOW */
+  .flow-container {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 24px;
+  }
+  .flow-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: nowrap;
+  }
+  .flow-step {
+    background: #0d1117;
+    border: 2px solid #30363d;
+    border-radius: 12px;
+    padding: 16px 20px;
+    text-align: center;
+    min-width: 140px;
+    position: relative;
+  }
+  .flow-step .step-num {
+    font-size: 11px;
+    color: #8b949e;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .flow-step .step-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #e6edf3;
+    margin-bottom: 2px;
+  }
+  .flow-step .step-desc {
+    font-size: 11px;
+    color: #8b949e;
+  }
+  .flow-step.blue { border-color: #1f6feb; }
+  .flow-step.green { border-color: #238636; }
+  .flow-step.purple { border-color: #8957e5; }
+  .flow-step.orange { border-color: #9e6a03; }
+  .flow-arrow {
+    color: #484f58;
+    font-size: 24px;
+    padding: 0 8px;
+    flex-shrink: 0;
+  }
+
+  /* BRANCHES */
+  .branches-diagram {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 24px;
+  }
+  .branch-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 12px 16px;
+    background: #0d1117;
+    border-radius: 8px;
+    border-left: 4px solid;
+  }
+  .branch-row.main { border-left-color: #3fb950; }
+  .branch-row.develop { border-left-color: #58a6ff; }
+  .branch-row.feature { border-left-color: #bc8cff; }
+  .branch-row.release { border-left-color: #d29922; }
+  .branch-row.hotfix { border-left-color: #f85149; }
+  .branch-name {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 14px;
+    font-weight: 600;
+    min-width: 140px;
+  }
+  .branch-name.main { color: #3fb950; }
+  .branch-name.develop { color: #58a6ff; }
+  .branch-name.feature { color: #bc8cff; }
+  .branch-name.release { color: #d29922; }
+  .branch-name.hotfix { color: #f85149; }
+  .branch-desc {
+    font-size: 13px;
+    color: #8b949e;
+    flex: 1;
+    margin-left: 16px;
+  }
+  .branch-protection {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+    margin-left: 12px;
+  }
+  .badge-locked {
+    background: rgba(63,185,80,0.15);
+    color: #3fb950;
+  }
+  .badge-pr {
+    background: rgba(88,166,255,0.15);
+    color: #58a6ff;
+  }
+  .badge-open {
+    background: rgba(139,148,158,0.15);
+    color: #8b949e;
+  }
+
+  /* COMMIT FORMAT */
+  .commit-format {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 32px;
+  }
+  .commit-example {
+    font-family: 'SFMono-Regular', Consolas, monospace;
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-size: 14px;
+    margin-bottom: 16px;
+    line-height: 1.8;
+  }
+  .commit-example .type { color: #d29922; font-weight: 700; }
+  .commit-example .scope { color: #bc8cff; }
+  .commit-example .desc { color: #e6edf3; }
+  .commit-types {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .commit-type {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 10px 12px;
+    text-align: center;
+  }
+  .commit-type code {
+    display: block;
+    font-family: 'SFMono-Regular', Consolas, monospace;
+    font-size: 14px;
+    font-weight: 700;
+    color: #d29922;
+    margin-bottom: 2px;
+  }
+  .commit-type span {
+    font-size: 11px;
+    color: #8b949e;
+  }
+
+  /* TWO COLUMNS */
+  .two-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  /* PR WORKFLOW */
+  .pr-workflow {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 32px;
+  }
+  .pr-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .pr-step:last-child { margin-bottom: 0; }
+  .pr-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #1f6feb;
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .pr-content .title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #e6edf3;
+  }
+  .pr-content .detail {
+    font-size: 12px;
+    color: #8b949e;
+  }
+
+  /* QUICK REF */
+  .quick-ref {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 32px;
+  }
+  .cmd-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    padding: 8px 12px;
+    background: #0d1117;
+    border-radius: 6px;
+  }
+  .cmd-desc {
+    font-size: 12px;
+    color: #8b949e;
+    min-width: 200px;
+  }
+  .cmd-code {
+    font-family: 'SFMono-Regular', Consolas, monospace;
+    font-size: 13px;
+    color: #79c0ff;
+  }
+
+  /* FOOTER */
+  .footer-section {
+    margin-top: 36px;
+    padding-top: 24px;
+    border-top: 2px solid #30363d;
+    text-align: center;
+  }
+  .wiki-cta {
+    display: inline-block;
+    background: linear-gradient(135deg, #238636, #1f6feb);
+    color: white;
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    margin-bottom: 16px;
+  }
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 12px;
+  }
+  .footer-link {
+    color: #58a6ff;
+    text-decoration: none;
+    font-size: 13px;
+  }
+  .footer-note {
+    color: #484f58;
+    font-size: 11px;
+    margin-top: 16px;
+  }
+
+  /* PIPELINE SECTION */
+  .pipeline-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin: 16px 0;
+  }
+  .pipe-stage {
+    padding: 14px 18px;
+    border-radius: 10px;
+    text-align: center;
+    min-width: 120px;
+  }
+  .pipe-stage .pipe-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .pipe-stage .pipe-desc {
+    font-size: 10px;
+    opacity: 0.8;
+  }
+  .pipe-build { background: #1f6feb; }
+  .pipe-test { background: #8957e5; }
+  .pipe-staging { background: #9e6a03; }
+  .pipe-approve { background: #484f58; }
+  .pipe-prod { background: #238636; }
+  .pipe-arrow {
+    color: #484f58;
+    font-size: 20px;
+    padding: 0 6px;
+  }
+</style>
+</head>
+<body>
+<div class="nav">
+  <a href="../">Portal</a> <span>/</span> <span>Modelo de Trabajo</span>
+</div>
+<div class="infographic">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">GoEcosystemDH</div>
+    <h1>Modelo de Trabajo en GitHub</h1>
+    <div class="subtitle">Guia visual para desarrolladores &mdash; Marzo 2026</div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="value green">37</div>
+      <div class="label">Repos Migrados</div>
+    </div>
+    <div class="stat">
+      <div class="value">24</div>
+      <div class="label">Pipelines CI/CD</div>
+    </div>
+    <div class="stat">
+      <div class="value purple">91</div>
+      <div class="label">Repos Totales</div>
+    </div>
+    <div class="stat">
+      <div class="value orange">54</div>
+      <div class="label">Archivo Historico</div>
+    </div>
+  </div>
+
+  <!-- PLATAFORMAS -->
+  <div class="section">
+    <div class="section-title">
+      <div class="icon icon-blue">&#x1F310;</div>
+      Nuestras 3 Plataformas
+    </div>
+    <div class="platforms">
+      <div class="platform-card">
+        <div class="name">Azure DevOps</div>
+        <div class="url">dev.azure.com/goecosystem</div>
+        <div class="desc">Planificacion: Epics, Features, User Stories, Tasks, Sprints</div>
+      </div>
+      <div class="platform-card">
+        <div class="name">GitHub</div>
+        <div class="url">github.com/GoEcosystemDH</div>
+        <div class="desc">Codigo fuente, Pull Requests, CI/CD con GitHub Actions</div>
+      </div>
+      <div class="platform-card">
+        <div class="name">Wiki</div>
+        <div class="url">wiki.goecosystemdh.com</div>
+        <div class="desc">Documentacion tecnica, guias, procesos y estandares</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLUJO DE DESARROLLO -->
+  <div class="section">
+    <div class="section-title">
+      <div class="icon icon-green">&#x1F504;</div>
+      Flujo de Desarrollo
+    </div>
+    <div class="flow-container">
+      <div class="flow-row">
+        <div class="flow-step blue">
+          <div class="step-num">Paso 1</div>
+          <div class="step-title">Clonar Repo</div>
+          <div class="step-desc">Desde GitHub</div>
+        </div>
+        <div class="flow-arrow">&#x2192;</div>
+        <div class="flow-step purple">
+          <div class="step-num">Paso 2</div>
+          <div class="step-title">Crear Branch</div>
+          <div class="step-desc">feature/* desde develop</div>
+        </div>
+        <div class="flow-arrow">&#x2192;</div>
+        <div class="flow-step purple">
+          <div class="step-num">Paso 3</div>
+          <div class="step-title">Commits</div>
+          <div class="step-desc">Conventional Commits</div>
+        </div>
+        <div class="flow-arrow">&#x2192;</div>
+        <div class="flow-step blue">
+          <div class="step-num">Paso 4</div>
+          <div class="step-title">Push + PR</div>
+          <div class="step-desc">Hacia develop</div>
+        </div>
+        <div class="flow-arrow">&#x2192;</div>
+        <div class="flow-step orange">
+          <div class="step-num">Paso 5</div>
+          <div class="step-title">Code Review</div>
+          <div class="step-desc">Min. 1 approval</div>
+        </div>
+        <div class="flow-arrow">&#x2192;</div>
+        <div class="flow-step green">
+          <div class="step-num">Paso 6</div>
+          <div class="step-title">Merge</div>
+          <div class="step-desc">CI/CD automatico</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BRANCHES -->
+  <div class="section">
+    <div class="section-title">
+      <div class="icon icon-purple">&#x1F33F;</div>
+      Politica de Branches (GitFlow)
+    </div>
+    <div class="branches-diagram">
+      <div class="branch-row main">
+        <span class="branch-name main">main</span>
+        <span class="branch-desc">Produccion &mdash; Solo recibe merges de release/* y hotfix/*</span>
+        <span class="branch-protection badge-locked">Bloqueada</span>
+      </div>
+      <div class="branch-row develop">
+        <span class="branch-name develop">develop</span>
+        <span class="branch-desc">Integracion &mdash; Aqui convergen todas las features terminadas</span>
+        <span class="branch-protection badge-pr">PR Requerido</span>
+      </div>
+      <div class="branch-row feature">
+        <span class="branch-name feature">feature/*</span>
+        <span class="branch-desc">Nuevas funcionalidades &mdash; Se crea desde develop, se mergea a develop</span>
+        <span class="branch-protection badge-open">Abierta</span>
+      </div>
+      <div class="branch-row release">
+        <span class="branch-name release">release/*</span>
+        <span class="branch-desc">Preparacion de release &mdash; Desde develop, se mergea a main y develop</span>
+        <span class="branch-protection badge-pr">PR Requerido</span>
+      </div>
+      <div class="branch-row hotfix">
+        <span class="branch-name hotfix">hotfix/*</span>
+        <span class="branch-desc">Fixes urgentes en produccion &mdash; Desde main, se mergea a main y develop</span>
+        <span class="branch-protection badge-pr">PR Requerido</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="two-cols">
+    <!-- CONVENTIONAL COMMITS -->
+    <div class="section">
+      <div class="section-title">
+        <div class="icon icon-orange">&#x1F4DD;</div>
+        Conventional Commits
+      </div>
+      <div class="commit-format">
+        <div class="commit-example">
+          <span class="type">feat</span><span class="scope">(auth)</span>: <span class="desc">add SSO login endpoint</span><br>
+          <span class="type">fix</span><span class="scope">(api)</span>: <span class="desc">resolve null pointer in user service</span><br>
+          <span class="type">docs</span><span class="scope">(readme)</span>: <span class="desc">update installation steps</span>
+        </div>
+        <div class="commit-types">
+          <div class="commit-type"><code>feat</code><span>Nueva funcion</span></div>
+          <div class="commit-type"><code>fix</code><span>Correccion bug</span></div>
+          <div class="commit-type"><code>docs</code><span>Documentacion</span></div>
+          <div class="commit-type"><code>refactor</code><span>Refactorizacion</span></div>
+          <div class="commit-type"><code>test</code><span>Tests</span></div>
+          <div class="commit-type"><code>chore</code><span>Mantenimiento</span></div>
+          <div class="commit-type"><code>ci</code><span>CI/CD</span></div>
+          <div class="commit-type"><code>perf</code><span>Rendimiento</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PR WORKFLOW -->
+    <div class="section">
+      <div class="section-title">
+        <div class="icon icon-blue">&#x1F50D;</div>
+        Workflow de Pull Request
+      </div>
+      <div class="pr-workflow">
+        <div class="pr-step">
+          <div class="pr-num">1</div>
+          <div class="pr-content">
+            <div class="title">Crear Pull Request</div>
+            <div class="detail">Desde tu feature branch hacia develop</div>
+          </div>
+        </div>
+        <div class="pr-step">
+          <div class="pr-num">2</div>
+          <div class="pr-content">
+            <div class="title">Checks Automaticos</div>
+            <div class="detail">Lint, Tests, Build, Conventional Commits</div>
+          </div>
+        </div>
+        <div class="pr-step">
+          <div class="pr-num">3</div>
+          <div class="pr-content">
+            <div class="title">Code Review</div>
+            <div class="detail">Minimo 1 approval (2 para arquitectura)</div>
+          </div>
+        </div>
+        <div class="pr-step">
+          <div class="pr-num">4</div>
+          <div class="pr-content">
+            <div class="title">Merge a develop</div>
+            <div class="detail">Pipeline CI/CD se ejecuta automaticamente</div>
+          </div>
+        </div>
+        <div class="pr-step">
+          <div class="pr-num">5</div>
+          <div class="pr-content">
+            <div class="title">Deploy a Staging</div>
+            <div class="detail">Automatico tras merge a develop</div>
+          </div>
+        </div>
+        <div class="pr-step">
+          <div class="pr-num">6</div>
+          <div class="pr-content">
+            <div class="title">Release a Produccion</div>
+            <div class="detail">Via release/* branch con aprobacion</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PIPELINE CI/CD -->
+  <div class="section" style="margin-top: 24px;">
+    <div class="section-title">
+      <div class="icon icon-green">&#x1F680;</div>
+      Pipeline CI/CD (GitHub Actions)
+    </div>
+    <div class="flow-container">
+      <div class="pipeline-flow">
+        <div class="pipe-stage pipe-build">
+          <div class="pipe-title">Build</div>
+          <div class="pipe-desc">Compilar + Docker</div>
+        </div>
+        <div class="pipe-arrow">&#x2192;</div>
+        <div class="pipe-stage pipe-test">
+          <div class="pipe-title">Test</div>
+          <div class="pipe-desc">Lint + Unit + Scan</div>
+        </div>
+        <div class="pipe-arrow">&#x2192;</div>
+        <div class="pipe-stage pipe-staging">
+          <div class="pipe-title">Staging</div>
+          <div class="pipe-desc">Deploy automatico</div>
+        </div>
+        <div class="pipe-arrow">&#x2192;</div>
+        <div class="pipe-stage pipe-approve">
+          <div class="pipe-title">Approval</div>
+          <div class="pipe-desc">Revision manual</div>
+        </div>
+        <div class="pipe-arrow">&#x2192;</div>
+        <div class="pipe-stage pipe-prod">
+          <div class="pipe-title">Produccion</div>
+          <div class="pipe-desc">Zero-downtime</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK REFERENCE -->
+  <div class="section">
+    <div class="section-title">
+      <div class="icon icon-red">&#x26A1;</div>
+      Referencia Rapida de Comandos
+    </div>
+    <div class="quick-ref">
+      <div class="cmd-row">
+        <span class="cmd-desc">Clonar repositorio</span>
+        <span class="cmd-code">git clone git@github.com:GoEcosystemDH/mi-repo.git</span>
+      </div>
+      <div class="cmd-row">
+        <span class="cmd-desc">Crear feature branch</span>
+        <span class="cmd-code">git checkout develop && git pull && git checkout -b feature/TICKET-123-descripcion</span>
+      </div>
+      <div class="cmd-row">
+        <span class="cmd-desc">Commit con convencion</span>
+        <span class="cmd-code">git commit -m "feat(modulo): descripcion del cambio"</span>
+      </div>
+      <div class="cmd-row">
+        <span class="cmd-desc">Push y crear PR</span>
+        <span class="cmd-code">git push -u origin feature/TICKET-123-descripcion</span>
+      </div>
+      <div class="cmd-row">
+        <span class="cmd-desc">Actualizar develop local</span>
+        <span class="cmd-code">git checkout develop && git pull origin develop</span>
+      </div>
+      <div class="cmd-row">
+        <span class="cmd-desc">Despues del merge, limpiar</span>
+        <span class="cmd-code">git branch -d feature/TICKET-123-descripcion</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer-section">
+    <a href="https://wiki.goecosystemdh.com/onboarding/yBo0v69HmI" class="wiki-cta">
+      Ir a la Wiki de Onboarding
+    </a>
+    <div class="footer-links">
+      <a href="https://github.com/GoEcosystemDH" class="footer-link">GitHub: github.com/GoEcosystemDH</a>
+      <a href="https://wiki.goecosystemdh.com" class="footer-link">Wiki: wiki.goecosystemdh.com</a>
+      <a href="https://dev.azure.com/goecosystem/Go-Devops" class="footer-link">AzDO: dev.azure.com/goecosystem</a>
+    </div>
+    <div class="footer-note" style="margin-top:12px"><a href="../" style="color:#58a6ff;text-decoration:none">&#x2190; Volver al Portal</a> &middot; <a href="../homologacion/" style="color:#58a6ff;text-decoration:none">Tabla de Homologacion</a></div>
+    <div class="footer-note">Equipo DevOps &mdash; GoEcosystemDH &mdash; Marzo 2026</div>
+  </div>
+
+</div>
+</body>
+</html>

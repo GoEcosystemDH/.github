@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tabla de Homologacion — GoEcosystemDH</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:#0d1117;color:#e6edf3;min-height:100vh}
+  .container{max-width:1100px;margin:0 auto;padding:32px 24px}
+  .nav{display:flex;align-items:center;gap:8px;font-size:13px;color:#8b949e;margin-bottom:24px}
+  .nav a{color:#58a6ff;text-decoration:none}
+  .nav a:hover{text-decoration:underline}
+  h1{font-size:28px;font-weight:800;background:linear-gradient(135deg,#58a6ff,#3fb950);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
+  .subtitle{color:#8b949e;font-size:14px;margin-bottom:24px}
+  h2{font-size:18px;font-weight:700;color:#e6edf3;margin:32px 0 12px;padding-bottom:6px;border-bottom:1px solid #30363d}
+  .stats{display:flex;gap:24px;margin-bottom:32px;flex-wrap:wrap}
+  .stat-card{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:20px 28px;text-align:center;flex:1;min-width:140px}
+  .stat-card .num{font-size:32px;font-weight:800;color:#58a6ff}
+  .stat-card .num.green{color:#3fb950}
+  .stat-card .num.orange{color:#d29922}
+  .stat-card .lbl{font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+  .callout{border-left:4px solid #d29922;background:rgba(210,153,34,.1);padding:12px 16px;border-radius:0 8px 8px 0;margin:16px 0;font-size:13px;color:#e6edf3}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+  th{background:#161b22;border:1px solid #30363d;padding:10px 12px;text-align:left;font-weight:600;color:#e6edf3;position:sticky;top:0}
+  td{border:1px solid #21262d;padding:8px 12px;color:#c9d1d9}
+  tr:hover td{background:#161b22}
+  a{color:#58a6ff;text-decoration:none}
+  a:hover{text-decoration:underline}
+  .badge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600}
+  .b-green{background:rgba(63,185,80,.15);color:#3fb950}
+  .b-gray{background:rgba(139,148,158,.1);color:#484f58}
+  details{margin:16px 0}
+  summary{cursor:pointer;font-weight:600;font-size:14px;color:#58a6ff;padding:8px 0}
+  summary:hover{text-decoration:underline}
+  .footer{text-align:center;margin-top:40px;padding-top:20px;border-top:1px solid #30363d;color:#484f58;font-size:12px}
+  .footer a{color:#58a6ff}
+  @media(max-width:640px){.stats{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="nav">
+    <a href="../">Portal</a> <span>/</span> <span>Tabla de Homologacion</span>
+  </div>
+
+  <h1>Tabla de Homologacion de Repositorios</h1>
+  <p class="subtitle">Mapeo GitLab → GitHub — Migracion 2026</p>
+
+  <div class="stats">
+    <div class="stat-card"><div class="num green">37</div><div class="lbl">Repos Migrados (41%)</div></div>
+    <div class="stat-card"><div class="num">24</div><div class="lbl">Pipelines CI/CD Migrados</div></div>
+    <div class="stat-card"><div class="num orange">54</div><div class="lbl">No Migrados (59%)</div></div>
+    <div class="stat-card"><div class="num" style="color:#bc8cff">91</div><div class="lbl">Total Repos</div></div>
+  </div>
+
+  <h2>Repositorios Migrados</h2>
+
+  <table>
+  <thead>
+  <tr><th>Repo GitLab</th><th>Repo GitHub</th><th>Rama</th><th>Pipeline</th><th>CI/CD Migrado</th></tr>
+  </thead>
+  <tbody>
+  <tr><td>admin_referencia</td><td><a href="https://github.com/GoEcosystemDH/admin-referencia">admin-referencia</a></td><td>main</td><td><span class="badge b-green">Si</span></td><td><span class="badge b-green">Si</span></td></tr>
+  <tr><td>Android_RegistroClinicoVoz</td><td><a href="https://github.com/GoEcosystemDH/rcf-app-android">rcf-app-android</a></td><td>main</td><td><span class="badge b-gray">No</span></td><td><span class="badge b-gray">No</span></td></tr>
+  <tr><td>API_RegistroClinicoVoz</td><td><a href="https://github.com/GoEcosystemDH/rcf-api">rcf-api</a></td><td>master</td><td><span class="badge b-green">Si</span></td><td><span class="badge b-green">Si</span></td></tr>
+  <tr><td>ApiSiesa</td><td><a href="https://github.com/GoEcosystemDH/his-backend-siesa">his-backend-siesa</a></td><td>master</td><td><span class="badge b-green">Si</span></td><td><span class="badge b-green">Si</span></td></tr>
+  <tr><td>apiWS</td><td><a href="https://github.com/GoEcosystemDH/api-chatbot-aigenda">api-chatbot-aigenda</a></td><td>developer</td><td><span class="badge b-green">Si</span></td><td><span class="badge b-green">Si</span></td></tr>
+  <tr><td>app_referencia</td><td><a href="https://github.com/GoEcosystemDH/referencia">referencia</a></td><td>main</td><td><span class="badge b-green">Si</span></td><td><span class="badge b-green">Si</span></td></tr>
+  <tr><td>AppCeroTramites</td><td><a href="https://github.com/GoEcosystemDH/cero-tramites-app">cero-tramites-app</a></td><td>main</td><td><span class="badge b-gray">No</span></td><td><span class="badge b-gray">No</span></td></tr>
+  <tr><td>appMipres</td><td><a href="https://github.com/GoEcosystemDH/app-mipres">app-mipres</a></td><td>main</td><td><span class="badge b-green">Si</span></td><td><span class="badge b-green">Si</span></td></tr>
+  <tr><td>AppRCF</td><td><a href="https://github.com/GoEcosystemDH/rcf-app">rcf-app</a></td><td>main</td><td><span class="badge b-gray">No</span></td><td><span class="badge b-gray">No</span></td></tr>
+  <tr><td>appric_v1</td><td><a href="https://github.com/GoEcosystemDH/app-ric">app-ric</a></td><td>main</td><td><span class="badge b-green">Si</span></td><td><span class="badge b-green">Si</span></td></tr>
+  <tr><td>Citapp 0 tramites</td><td><a href="https://github.com/GoEcosystemDH/citapp-cero-tramites">citapp-cero-tramites</a></td><td>git_build</td><td><span class="badge b-green">Si</span></td><td><span class="badge b-green">Si</span></td></tr>
+  <tr><td>citapp_v2</td><td><a href="https://github.com/GoEcosystemDH/citapp-cero-tramites-v2">citapp-cero-tramites-v2</a></td><td>git_build</td><td><span class="badge b-green">Si</span></td><td><span class="badge b-green">Si</span></td></tr>
+  <tr><td>cmi</td><td><a href="https://github.com/GoEcosystemDH/cuadro-mando-integral">cuadro-mando-integral</a></td><td>git_build</td><td><span class="badge b-green">Si</span></td><td><span class="badge b-green">Si</span></td></tr>
+  <tr><td>cmi_costos</td><td><a href="https://github.com/GoEcosystemDH/cuadro-mando-integral-app-costos">cuadro-mando-integral-app-costos</a></td><td>git_build</td><td><span class="badge b-green">Si</span></td><td><span class="badge b-green">Si</span></td></tr>
+  <tr><td>cmi_services</td><td><a href="https://github.com/GoEcosystemDH/cuadro-mando-integral-services">cuadro-mando-integral-services</a></td><td>git_build</td><td><span class="badge b-green">Si</span></td><td><span class="badge b-green">Si</span></td></tr>
+  <tr><td>costosapp_desarrollo</td><td><a href="https://github.com/GoEcosystemDH/costos-web">costos-web</a></td><td>master</td><td><span class="badge b-green">Si</span></td><td><span class="badge b-green">Si</span></td></tr>
+  <tr><td>Devops</td><td><a href="https://github.com/GoEcosystemDH/runners-gitlab">runners-gitlab</a></td><td>main</td><td><span class="badge b-gray">No</span></td><td><span class="badge b-gray">No</span></td></tr>
+  <tr><td>Docker</td><td><a href="https://github.com/GoEcosystemDH/docker-infra">docker-infra</a></td><td>main</td><td><span class="badge b-gray">No</span></td><td><span class="badge b-gray">No</span></td></tr>
+  <tr><td>gestionApp</td><td><a href="https://github.com/GoEcosystemDH/gestion-notificaciones-app">gestion-notificaciones-app</a></td><td>git_build</td><td><span class="badge b-green">Si</span></td><td><span class="badge b-gray">No</span></td></tr>
+  <tr><td>gestionar_wtp</td><td><a href="https://github.com/GoEcosystemDH/gestionar-bots-whatsapp">gestionar-bots-whatsapp</a></td><td>develop</td><td><span class="badge b-green">Si</span></td><td><span class="badge b-gray">No</span></td></tr>
+  <tr><td>gopdf</td><td><a href="https://github.com/GoEcosystemDH/go-pdf">go-pdf</a></td><td>main</td><td><span class="badge b-green">Si</span></td><td><span class="badge b-green">Si</span></td></tr>
+  <tr><td>HIS_OPEDALE_CIRUGIA</td><td><a href="https://github.com/GoEcosystemDH/his-frontend-cirugia">his-frontend-cirugia</a></td><td>main</td><td><span class="badge b-green">Si</span></td><td><span class="badge b-green">Si</span></td></tr>
+  <tr><td>HIS_Ospedale</td><td><a href="https://github.com/GoEcosystemDH/his-frontend-core">his-frontend-core</a></td><td>main</td><td><span class="badge b-green">Si</span></td><td><span class="badge b-green">Si</span></td></tr>
+  <tr><td>HIS_Ospedale_Services</td><td><a href="https://github.com/GoEcosystemDH/his-backend-core">his-backend-core</a></td><td>main</td><td><span class="badge b-green">Si</span></td><td><span class="badge b-green">Si</span></td></tr>
+  <tr><td>his_servicios_consulta_externa</td><td><a href="https://github.com/GoEcosystemDH/his-backend-consulta-externa">his-backend-consulta-externa</a></td><td>main</td><td><span class="badge b-green">Si</span></td><td><span class="badge b-green">Si</span></td></tr>
+  <tr><td>minciencias_audifarma</td><td><a href="https://github.com/GoEcosystemDH/minciencias-audifarma">minciencias-audifarma</a></td><td>main</td><td><span class="badge b-gray">No</span></td><td><span class="badge b-gray">No</span></td></tr>
+  <tr><td>pgp</td><td><a href="https://github.com/GoEcosystemDH/contratos">contratos</a></td><td>master</td><td><span class="badge b-green">Si</span></td><td><span class="badge b-gray">No</span></td></tr>
+  <tr><td>ProyectoAMS</td><td><a href="https://github.com/GoEcosystemDH/asm">asm</a></td><td>master</td><td><span class="badge b-gray">No</span></td><td><span class="badge b-gray">No</span></td></tr>
+  <tr><td>ProyectoAMSMovil</td><td><a href="https://github.com/GoEcosystemDH/asm-mobile">asm-mobile</a></td><td>main</td><td><span class="badge b-gray">No</span></td><td><span class="badge b-gray">No</span></td></tr>
+  <tr><td>ProyectoCeroTramites</td><td><a href="https://github.com/GoEcosystemDH/cero-tramites-web">cero-tramites-web</a></td><td>master</td><td><span class="badge b-green">Si</span></td><td><span class="badge b-green">Si</span></td></tr>
+  <tr><td>Qse</td><td><a href="https://github.com/GoEcosystemDH/qse">qse</a></td><td>main</td><td><span class="badge b-green">Si</span></td><td><span class="badge b-green">Si</span></td></tr>
+  <tr><td>RegistroClinicoFacil</td><td><a href="https://github.com/GoEcosystemDH/registro-clinico-facil-app-v1">registro-clinico-facil-app-v1</a></td><td>main</td><td><span class="badge b-gray">No</span></td><td><span class="badge b-gray">No</span></td></tr>
+  <tr><td>Sherlock TRC</td><td><a href="https://github.com/GoEcosystemDH/sherlock-trc">sherlock-trc</a></td><td>main</td><td><span class="badge b-gray">No</span></td><td><span class="badge b-gray">No</span></td></tr>
+  <tr><td>Staff_back</td><td><a href="https://github.com/GoEcosystemDH/staff-api-typebot">staff-api-typebot</a></td><td>git_build</td><td><span class="badge b-green">Si</span></td><td><span class="badge b-green">Si</span></td></tr>
+  <tr><td>turnend</td><td><a href="https://github.com/GoEcosystemDH/turnero">turnero</a></td><td>turnend-CCE</td><td><span class="badge b-green">Si</span></td><td><span class="badge b-green">Si</span></td></tr>
+  <tr><td>usabilidadUED</td><td><a href="https://github.com/GoEcosystemDH/cuadro-mando-integral-ued">cuadro-mando-integral-ued</a></td><td>git_build</td><td><span class="badge b-green">Si</span></td><td><span class="badge b-green">Si</span></td></tr>
+  <tr><td>Viaticos</td><td><a href="https://github.com/GoEcosystemDH/viaticos">viaticos</a></td><td>main</td><td><span class="badge b-green">Si</span></td><td><span class="badge b-green">Si</span></td></tr>
+  </tbody>
+  </table>
+
+  <h2>Repositorios No Migrados (Archivo Historico)</h2>
+
+  <div class="callout">
+    <strong>54 repositorios</strong> permanecen en GitLab. El 96% no ha tenido actividad en mas de 1 ano y el 67% lleva mas de 2 anos inactivo. Se conservan como archivo historico.
+  </div>
+
+  <details>
+  <summary>Ver lista completa de repos no migrados (54)</summary>
+  <table>
+  <thead><tr><th>Repo GitLab</th><th>Ultima Actividad</th><th>Inactividad</th></tr></thead>
+  <tbody>
+  <tr><td>API_HIS</td><td>2021-03-17</td><td>5 anos</td></tr>
+  <tr><td>Api_Juridico</td><td>2024-03-13</td><td>2 anos</td></tr>
+  <tr><td>Api_Viaticos</td><td>2024-03-12</td><td>2 anos</td></tr>
+  <tr><td>apirest</td><td>2021-06-17</td><td>5 anos</td></tr>
+  <tr><td>app_cmi</td><td>2025-06-03</td><td>10 meses</td></tr>
+  <tr><td>app-android-EvolutionSubjectivePatient</td><td>2022-05-05</td><td>4 anos</td></tr>
+  <tr><td>AppGestionPreventivaDigital</td><td>2024-12-06</td><td>1 ano</td></tr>
+  <tr><td>appjunta</td><td>2024-06-21</td><td>2 anos</td></tr>
+  <tr><td>appRic</td><td>2024-05-31</td><td>2 anos</td></tr>
+  <tr><td>appric_desarrollo</td><td>2024-06-18</td><td>2 anos</td></tr>
+  <tr><td>appRic_desarrollo_old</td><td>2022-03-03</td><td>4 anos</td></tr>
+  <tr><td>appRic_old</td><td>2021-06-17</td><td>5 anos</td></tr>
+  <tr><td>Auth API</td><td>2023-06-07</td><td>3 anos</td></tr>
+  <tr><td>aws</td><td>2024-03-08</td><td>2 anos</td></tr>
+  <tr><td>biometrics-ospedale-web</td><td>2021-03-26</td><td>5 anos</td></tr>
+  <tr><td>BoletaSalida2</td><td>2021-08-05</td><td>5 anos</td></tr>
+  <tr><td>BombasInfusion</td><td>2021-08-26</td><td>5 anos</td></tr>
+  <tr><td>bot_cliente</td><td>2025-02-25</td><td>1 ano</td></tr>
+  <tr><td>Citapp</td><td>2021-04-14</td><td>5 anos</td></tr>
+  <tr><td>citapp_user</td><td>2024-05-31</td><td>2 anos</td></tr>
+  <tr><td>cohortes</td><td>2022-04-29</td><td>4 anos</td></tr>
+  <tr><td>compensar</td><td>2024-05-31</td><td>2 anos</td></tr>
+  <tr><td>costos</td><td>2024-01-15</td><td>2 anos</td></tr>
+  <tr><td>cuidar</td><td>2024-03-20</td><td>2 anos</td></tr>
+  <tr><td>django_hola_mundo</td><td>2021-12-21</td><td>4 anos</td></tr>
+  <tr><td>eHIS Oncologico API</td><td>2024-12-03</td><td>1 ano</td></tr>
+  <tr><td>eHIS Oncologico Frontend</td><td>2024-12-03</td><td>1 ano</td></tr>
+  <tr><td>encuestapp_teleconsulta</td><td>2021-06-17</td><td>5 anos</td></tr>
+  <tr><td>encuestas_wtp</td><td>2022-06-09</td><td>4 anos</td></tr>
+  <tr><td>enviapp</td><td>2024-05-31</td><td>2 anos</td></tr>
+  <tr><td>enviapp_old</td><td>2021-06-17</td><td>5 anos</td></tr>
+  <tr><td>etl</td><td>2021-06-21</td><td>5 anos</td></tr>
+  <tr><td>gestionApp_old</td><td>2022-08-19</td><td>4 anos</td></tr>
+  <tr><td>glpi-db</td><td>2025-02-20</td><td>1 ano</td></tr>
+  <tr><td>hemoderivados</td><td>2021-07-15</td><td>5 anos</td></tr>
+  <tr><td>his_consulta_externa_servicios</td><td>2024-04-25</td><td>2 anos</td></tr>
+  <tr><td>HIS_Facturacion</td><td>2023-06-08</td><td>3 anos</td></tr>
+  <tr><td>HIS_Facturacion_Services</td><td>2023-06-08</td><td>3 anos</td></tr>
+  <tr><td>HIS_HISTORIA_CLINICA</td><td>2024-06-06</td><td>2 anos</td></tr>
+  <tr><td>HIS_Ospedale_RCF</td><td>2024-07-08</td><td>2 anos</td></tr>
+  <tr><td>interoperabilidad</td><td>2021-06-21</td><td>5 anos</td></tr>
+  <tr><td>Juridico</td><td>2024-03-14</td><td>2 anos</td></tr>
+  <tr><td>Learn GitLab</td><td>2021-12-27</td><td>4 anos</td></tr>
+  <tr><td>MinSalud</td><td>2024-12-24</td><td>1 ano</td></tr>
+  <tr><td>modelo</td><td>2021-06-21</td><td>5 anos</td></tr>
+  <tr><td>nginx</td><td>2023-12-21</td><td>2 anos</td></tr>
+  <tr><td>pdfGo</td><td>2024-12-20</td><td>1 ano</td></tr>
+  <tr><td>proyecto control</td><td>2023-04-03</td><td>3 anos</td></tr>
+  <tr><td>ProyectoVias</td><td>2024-02-05</td><td>2 anos</td></tr>
+  <tr><td>qse (old)</td><td>2024-01-22</td><td>2 anos</td></tr>
+  <tr><td>Super Giros</td><td>2023-06-07</td><td>3 anos</td></tr>
+  <tr><td>Tickets</td><td>2025-04-22</td><td>11 meses</td></tr>
+  <tr><td>Web_RegistroClinicoVoz</td><td>2021-03-15</td><td>5 anos</td></tr>
+  <tr><td>wsc-ams</td><td>2022-09-27</td><td>4 anos</td></tr>
+  </tbody>
+  </table>
+  </details>
+
+  <div class="footer">
+    <p><a href="../">&#x2190; Volver al Portal</a> &middot; <a href="../workflow/">Modelo de Trabajo</a></p>
+    <p style="margin-top:8px">GoEcosystemDH &mdash; Equipo DevOps &mdash; 2026</p>
+  </div>
+</div>
+</body>
+</html>
