@@ -3,166 +3,240 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Modelo de Trabajo en GitHub - GoEcosystemDH</title>
+<title>Modelo de Trabajo en GitHub — Guia para Desarrolladores — GoEcosystemDH</title>
 <style>
-  @page { size: A3 portrait; margin: 0; }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     background: #0d1117;
     color: #e6edf3;
-    width: 1200px;
-    margin: 0 auto;
+    line-height: 1.7;
     padding: 0;
-  }
-  .nav{display:flex;align-items:center;gap:8px;font-size:13px;color:#8b949e;padding:16px 48px 0;max-width:1200px;margin:0 auto}
-  .nav a{color:#58a6ff;text-decoration:none}
-  .nav a:hover{text-decoration:underline}
-  .infographic {
-    background: linear-gradient(180deg, #0d1117 0%, #161b22 100%);
-    padding: 48px;
+    margin: 0;
   }
 
+  .page-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 20px 48px;
+  }
+
+  /* BREADCRUMB */
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #8b949e;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #21262d;
+  }
+  .breadcrumb a {
+    color: #58a6ff;
+    text-decoration: none;
+  }
+  .breadcrumb a:hover { text-decoration: underline; }
+  .breadcrumb .sep { color: #484f58; }
+
   /* HEADER */
-  .header {
+  .page-header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 48px;
     padding-bottom: 32px;
     border-bottom: 2px solid #30363d;
   }
-  .header .logo {
-    font-size: 14px;
+  .page-header .org-label {
+    font-size: 13px;
     color: #8b949e;
-    letter-spacing: 4px;
+    letter-spacing: 3px;
     text-transform: uppercase;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
   }
-  .header h1 {
-    font-size: 36px;
+  .page-header h1 {
+    font-size: 32px;
     font-weight: 800;
     background: linear-gradient(135deg, #58a6ff 0%, #3fb950 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin-bottom: 8px;
+    line-height: 1.3;
   }
-  .header .subtitle {
+  .page-header .subtitle {
     color: #8b949e;
     font-size: 16px;
   }
 
-  /* STATS BAR */
-  .stats-bar {
-    display: flex;
-    justify-content: center;
-    gap: 48px;
-    margin-bottom: 40px;
-    padding: 24px;
-    background: #161b22;
-    border: 1px solid #30363d;
-    border-radius: 12px;
-  }
-  .stat {
-    text-align: center;
-  }
-  .stat .value {
-    font-size: 40px;
-    font-weight: 800;
-    color: #58a6ff;
-  }
-  .stat .value.green { color: #3fb950; }
-  .stat .value.orange { color: #d29922; }
-  .stat .value.purple { color: #bc8cff; }
-  .stat .label {
-    font-size: 12px;
-    color: #8b949e;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-top: 2px;
-  }
-
-  /* SECTION */
+  /* SECTIONS */
   .section {
-    margin-bottom: 36px;
+    margin-bottom: 56px;
   }
   .section-title {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 700;
     color: #e6edf3;
     margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #21262d;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
   }
-  .section-title .icon {
-    width: 32px;
-    height: 32px;
+  .section-icon {
+    width: 36px;
+    height: 36px;
     border-radius: 8px;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
+    font-size: 18px;
+    flex-shrink: 0;
   }
   .icon-blue { background: #1f6feb; }
   .icon-green { background: #238636; }
   .icon-purple { background: #8957e5; }
   .icon-orange { background: #9e6a03; }
   .icon-red { background: #da3633; }
+  .icon-teal { background: #1a7f5a; }
 
-  /* PLATFORMS */
-  .platforms {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-bottom: 36px;
+  p {
+    margin-bottom: 16px;
+    color: #c9d1d9;
+    font-size: 15px;
   }
-  .platform-card {
-    background: #161b22;
-    border: 1px solid #30363d;
-    border-radius: 12px;
-    padding: 24px;
-    text-align: center;
-    transition: border-color 0.2s;
-  }
-  .platform-card:hover { border-color: #58a6ff; }
-  .platform-card .name {
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-  .platform-card .url {
+  p strong { color: #e6edf3; }
+
+  /* NORM LINK */
+  .norm-link {
+    display: inline-block;
+    margin-top: 12px;
     font-size: 13px;
     color: #58a6ff;
-    margin-bottom: 8px;
+    text-decoration: none;
+    border: 1px solid #30363d;
+    padding: 6px 14px;
+    border-radius: 6px;
+    transition: background 0.2s, border-color 0.2s;
   }
-  .platform-card .desc {
-    font-size: 12px;
-    color: #8b949e;
+  .norm-link:hover {
+    background: #161b22;
+    border-color: #58a6ff;
+    text-decoration: none;
   }
 
-  /* FLOW */
-  .flow-container {
+  /* CALLOUT BOXES */
+  .callout {
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    line-height: 1.6;
+    border-left: 4px solid;
+  }
+  .callout-info {
+    background: rgba(56, 139, 253, 0.08);
+    border-left-color: #58a6ff;
+    color: #c9d1d9;
+  }
+  .callout-tip {
+    background: rgba(63, 185, 80, 0.08);
+    border-left-color: #3fb950;
+    color: #c9d1d9;
+  }
+  .callout-warning {
+    background: rgba(210, 153, 34, 0.08);
+    border-left-color: #d29922;
+    color: #c9d1d9;
+  }
+  .callout-label {
+    font-weight: 700;
+    margin-bottom: 4px;
+    display: block;
+  }
+  .callout-info .callout-label { color: #58a6ff; }
+  .callout-tip .callout-label { color: #3fb950; }
+  .callout-warning .callout-label { color: #d29922; }
+
+  /* CODE BLOCKS */
+  .code-block {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    overflow-x: auto;
+    margin-bottom: 16px;
+    color: #c9d1d9;
+  }
+  .code-block .comment { color: #8b949e; }
+  .code-block .cmd { color: #79c0ff; }
+  .code-block .output { color: #8b949e; font-style: italic; }
+  .code-block .highlight { color: #3fb950; font-weight: 600; }
+
+  code {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    background: #161b22;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #79c0ff;
+    border: 1px solid #30363d;
+  }
+
+  /* TABLES */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+  .data-table th {
+    background: #161b22;
+    color: #e6edf3;
+    font-weight: 600;
+    text-align: left;
+    padding: 10px 14px;
+    border: 1px solid #30363d;
+    font-size: 13px;
+  }
+  .data-table td {
+    padding: 10px 14px;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+    vertical-align: top;
+  }
+  .data-table tr:nth-child(even) td {
+    background: rgba(22, 27, 34, 0.5);
+  }
+
+  /* FLOW DIAGRAM */
+  .flow-diagram {
     background: #161b22;
     border: 1px solid #30363d;
     border-radius: 12px;
-    padding: 32px;
-    margin-bottom: 24px;
+    padding: 28px 24px;
+    margin-bottom: 20px;
   }
-  .flow-row {
+  .flow-steps {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
     gap: 0;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
   }
   .flow-step {
     background: #0d1117;
     border: 2px solid #30363d;
-    border-radius: 12px;
-    padding: 16px 20px;
+    border-radius: 10px;
+    padding: 14px 16px;
     text-align: center;
-    min-width: 140px;
-    position: relative;
+    min-width: 110px;
+    flex: 1;
+    max-width: 140px;
   }
   .flow-step .step-num {
     font-size: 11px;
@@ -172,7 +246,7 @@
     margin-bottom: 4px;
   }
   .flow-step .step-title {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 700;
     color: #e6edf3;
     margin-bottom: 2px;
@@ -180,90 +254,126 @@
   .flow-step .step-desc {
     font-size: 11px;
     color: #8b949e;
+    line-height: 1.4;
   }
   .flow-step.blue { border-color: #1f6feb; }
   .flow-step.green { border-color: #238636; }
   .flow-step.purple { border-color: #8957e5; }
   .flow-step.orange { border-color: #9e6a03; }
   .flow-arrow {
+    display: flex;
+    align-items: center;
     color: #484f58;
-    font-size: 24px;
-    padding: 0 8px;
+    font-size: 22px;
+    padding: 0 6px;
     flex-shrink: 0;
   }
 
-  /* BRANCHES */
-  .branches-diagram {
+  /* PIPELINE */
+  .pipeline-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+  .pipe-stage {
+    padding: 14px 16px;
+    border-radius: 10px;
+    text-align: center;
+    min-width: 115px;
+    color: #fff;
+  }
+  .pipe-stage .pipe-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .pipe-stage .pipe-desc {
+    font-size: 11px;
+    opacity: 0.85;
+    line-height: 1.4;
+  }
+  .pipe-build { background: #1f6feb; }
+  .pipe-test { background: #8957e5; }
+  .pipe-staging { background: #9e6a03; }
+  .pipe-approve { background: #484f58; }
+  .pipe-prod { background: #238636; }
+  .pipe-arrow {
+    color: #484f58;
+    font-size: 20px;
+    padding: 0 6px;
+    flex-shrink: 0;
+  }
+
+  /* BRANCH ROWS */
+  .branch-card {
     background: #161b22;
     border: 1px solid #30363d;
     border-radius: 12px;
-    padding: 32px;
-    margin-bottom: 24px;
+    padding: 24px;
+    margin-bottom: 20px;
   }
   .branch-row {
     display: flex;
     align-items: center;
-    margin-bottom: 12px;
-    padding: 12px 16px;
+    margin-bottom: 10px;
+    padding: 10px 14px;
     background: #0d1117;
     border-radius: 8px;
     border-left: 4px solid;
+    gap: 12px;
+    flex-wrap: wrap;
   }
+  .branch-row:last-child { margin-bottom: 0; }
   .branch-row.main { border-left-color: #3fb950; }
   .branch-row.develop { border-left-color: #58a6ff; }
   .branch-row.feature { border-left-color: #bc8cff; }
   .branch-row.release { border-left-color: #d29922; }
   .branch-row.hotfix { border-left-color: #f85149; }
   .branch-name {
-    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-family: 'SFMono-Regular', Consolas, monospace;
     font-size: 14px;
     font-weight: 600;
-    min-width: 140px;
+    min-width: 120px;
   }
-  .branch-name.main { color: #3fb950; }
-  .branch-name.develop { color: #58a6ff; }
-  .branch-name.feature { color: #bc8cff; }
-  .branch-name.release { color: #d29922; }
-  .branch-name.hotfix { color: #f85149; }
+  .branch-name.c-main { color: #3fb950; }
+  .branch-name.c-develop { color: #58a6ff; }
+  .branch-name.c-feature { color: #bc8cff; }
+  .branch-name.c-release { color: #d29922; }
+  .branch-name.c-hotfix { color: #f85149; }
   .branch-desc {
     font-size: 13px;
     color: #8b949e;
     flex: 1;
-    margin-left: 16px;
+    min-width: 200px;
   }
-  .branch-protection {
+  .branch-badge {
     font-size: 11px;
     padding: 3px 10px;
     border-radius: 12px;
     font-weight: 600;
-    margin-left: 12px;
+    white-space: nowrap;
   }
-  .badge-locked {
-    background: rgba(63,185,80,0.15);
-    color: #3fb950;
-  }
-  .badge-pr {
-    background: rgba(88,166,255,0.15);
-    color: #58a6ff;
-  }
-  .badge-open {
-    background: rgba(139,148,158,0.15);
-    color: #8b949e;
-  }
+  .badge-locked { background: rgba(63,185,80,0.15); color: #3fb950; }
+  .badge-pr { background: rgba(88,166,255,0.15); color: #58a6ff; }
+  .badge-open { background: rgba(139,148,158,0.15); color: #8b949e; }
 
   /* COMMIT FORMAT */
-  .commit-format {
+  .commit-box {
     background: #161b22;
     border: 1px solid #30363d;
     border-radius: 12px;
-    padding: 32px;
+    padding: 24px;
+    margin-bottom: 20px;
   }
   .commit-example {
     font-family: 'SFMono-Regular', Consolas, monospace;
     background: #0d1117;
     border: 1px solid #30363d;
     border-radius: 8px;
-    padding: 16px 20px;
+    padding: 14px 18px;
     font-size: 14px;
     margin-bottom: 16px;
     line-height: 1.8;
@@ -271,53 +381,256 @@
   .commit-example .type { color: #d29922; font-weight: 700; }
   .commit-example .scope { color: #bc8cff; }
   .commit-example .desc { color: #e6edf3; }
-  .commit-types {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-  }
-  .commit-type {
-    background: #0d1117;
-    border: 1px solid #30363d;
-    border-radius: 8px;
-    padding: 10px 12px;
-    text-align: center;
-  }
-  .commit-type code {
-    display: block;
-    font-family: 'SFMono-Regular', Consolas, monospace;
-    font-size: 14px;
-    font-weight: 700;
-    color: #d29922;
-    margin-bottom: 2px;
-  }
-  .commit-type span {
-    font-size: 11px;
-    color: #8b949e;
-  }
 
-  /* TWO COLUMNS */
-  .two-cols {
+  /* WRONG / RIGHT EXAMPLES */
+  .example-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 24px;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .example-wrong, .example-right {
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 13px;
+  }
+  .example-wrong {
+    background: rgba(248, 81, 73, 0.08);
+    border: 1px solid rgba(248, 81, 73, 0.3);
+  }
+  .example-wrong .label { color: #f85149; font-weight: 700; margin-bottom: 6px; }
+  .example-right {
+    background: rgba(63, 185, 80, 0.08);
+    border: 1px solid rgba(63, 185, 80, 0.3);
+  }
+  .example-right .label { color: #3fb950; font-weight: 700; margin-bottom: 6px; }
+  .example-wrong code, .example-right code {
+    display: block;
+    margin-top: 4px;
+    white-space: pre-wrap;
+    word-break: break-all;
   }
 
-  /* PR WORKFLOW */
-  .pr-workflow {
+  /* SCENARIO BOX */
+  .scenario-box {
     background: #161b22;
     border: 1px solid #30363d;
     border-radius: 12px;
-    padding: 32px;
+    padding: 24px;
+    margin-bottom: 20px;
   }
-  .pr-step {
+  .scenario-box h4 {
+    font-size: 15px;
+    color: #e6edf3;
+    margin-bottom: 12px;
+  }
+
+  /* COMMAND REFERENCE */
+  .cmd-group {
+    margin-bottom: 24px;
+  }
+  .cmd-group h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #e6edf3;
+    margin-bottom: 10px;
+    padding-left: 4px;
+  }
+  .cmd-row {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 6px;
+    padding: 8px 12px;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .cmd-label {
+    font-size: 12px;
+    color: #8b949e;
+    min-width: 180px;
+    padding-top: 2px;
+  }
+  .cmd-code {
+    font-family: 'SFMono-Regular', Consolas, monospace;
+    font-size: 13px;
+    color: #79c0ff;
+    flex: 1;
+    min-width: 200px;
+    word-break: break-all;
+  }
+
+  /* HELP LINKS */
+  .help-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .help-card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 16px 18px;
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+    display: block;
+  }
+  .help-card:hover {
+    border-color: #58a6ff;
+    background: #1c2128;
+  }
+  .help-card .help-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #58a6ff;
+    margin-bottom: 4px;
+  }
+  .help-card .help-desc {
+    font-size: 12px;
+    color: #8b949e;
+    line-height: 1.4;
+  }
+
+  /* FOOTER */
+  .page-footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 2px solid #30363d;
+    text-align: center;
+  }
+  .footer-nav {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .footer-nav a {
+    color: #58a6ff;
+    text-decoration: none;
+    font-size: 14px;
+  }
+  .footer-nav a:hover { text-decoration: underline; }
+  .footer-credit {
+    color: #484f58;
+    font-size: 12px;
+    margin-top: 12px;
+  }
+
+  /* APPROVAL TABLE */
+  .approval-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 16px;
+    font-size: 14px;
+  }
+  .approval-table th {
+    background: #161b22;
+    color: #e6edf3;
+    font-weight: 600;
+    text-align: left;
+    padding: 10px 14px;
+    border: 1px solid #30363d;
+    font-size: 13px;
+  }
+  .approval-table td {
+    padding: 10px 14px;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+  }
+
+  /* PR EXAMPLE */
+  .pr-example {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+  }
+  .pr-example .pr-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #e6edf3;
+    margin-bottom: 8px;
+  }
+  .pr-example .pr-desc {
+    font-size: 13px;
+    color: #8b949e;
+    line-height: 1.6;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 700px) {
+    .page-wrapper { padding: 16px 14px 32px; }
+    .page-header h1 { font-size: 24px; }
+    .flow-steps { flex-direction: column; align-items: center; }
+    .flow-arrow { transform: rotate(90deg); padding: 4px 0; }
+    .pipeline-flow { flex-direction: column; align-items: center; }
+    .pipe-arrow { transform: rotate(90deg); padding: 4px 0; }
+    .example-row { grid-template-columns: 1fr; }
+    .help-grid { grid-template-columns: 1fr; }
+    .branch-row { flex-direction: column; align-items: flex-start; }
+    .cmd-row { flex-direction: column; }
+    .cmd-label { min-width: unset; }
+  }
+
+  /* SUBSECTION */
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #e6edf3;
+    margin-bottom: 12px;
+    margin-top: 24px;
+  }
+
+  /* ORDERED LIST INSIDE SECTIONS */
+  .step-list {
+    counter-reset: step-counter;
+    list-style: none;
+    padding: 0;
+    margin-bottom: 16px;
+  }
+  .step-list li {
+    counter-increment: step-counter;
+    padding: 12px 16px 12px 48px;
+    margin-bottom: 8px;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    position: relative;
+    font-size: 14px;
+    color: #c9d1d9;
+    line-height: 1.6;
+  }
+  .step-list li::before {
+    content: counter(step-counter);
+    position: absolute;
+    left: 14px;
+    top: 12px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #1f6feb;
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .step-list li strong { color: #e6edf3; }
+
+  /* PR STEPS FLOW */
+  .pr-flow-step {
     display: flex;
     align-items: flex-start;
     gap: 12px;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
   }
-  .pr-step:last-child { margin-bottom: 0; }
-  .pr-num {
+  .pr-flow-num {
     width: 28px;
     height: 28px;
     border-radius: 50%;
@@ -330,415 +643,842 @@
     justify-content: center;
     flex-shrink: 0;
   }
-  .pr-content .title {
+  .pr-flow-content .pf-title {
     font-size: 14px;
     font-weight: 600;
     color: #e6edf3;
   }
-  .pr-content .detail {
-    font-size: 12px;
+  .pr-flow-content .pf-detail {
+    font-size: 13px;
     color: #8b949e;
+    line-height: 1.5;
   }
 
-  /* QUICK REF */
-  .quick-ref {
-    background: #161b22;
-    border: 1px solid #30363d;
-    border-radius: 12px;
-    padding: 32px;
-  }
-  .cmd-row {
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-    padding: 8px 12px;
-    background: #0d1117;
-    border-radius: 6px;
-  }
-  .cmd-desc {
-    font-size: 12px;
-    color: #8b949e;
-    min-width: 200px;
-  }
-  .cmd-code {
-    font-family: 'SFMono-Regular', Consolas, monospace;
-    font-size: 13px;
-    color: #79c0ff;
-  }
-
-  /* FOOTER */
-  .footer-section {
-    margin-top: 36px;
-    padding-top: 24px;
-    border-top: 2px solid #30363d;
-    text-align: center;
-  }
-  .wiki-cta {
-    display: inline-block;
-    background: linear-gradient(135deg, #238636, #1f6feb);
-    color: white;
-    padding: 14px 32px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 700;
-    text-decoration: none;
-    margin-bottom: 16px;
-  }
-  .footer-links {
-    display: flex;
-    justify-content: center;
-    gap: 32px;
-    margin-top: 12px;
-  }
-  .footer-link {
-    color: #58a6ff;
-    text-decoration: none;
-    font-size: 13px;
-  }
-  .footer-note {
-    color: #484f58;
-    font-size: 11px;
-    margin-top: 16px;
-  }
-
-  /* PIPELINE SECTION */
-  .pipeline-flow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0;
-    margin: 16px 0;
-  }
-  .pipe-stage {
-    padding: 14px 18px;
-    border-radius: 10px;
-    text-align: center;
-    min-width: 120px;
-  }
-  .pipe-stage .pipe-title {
-    font-size: 13px;
-    font-weight: 700;
-    margin-bottom: 2px;
-  }
-  .pipe-stage .pipe-desc {
-    font-size: 10px;
-    opacity: 0.8;
-  }
-  .pipe-build { background: #1f6feb; }
-  .pipe-test { background: #8957e5; }
-  .pipe-staging { background: #9e6a03; }
-  .pipe-approve { background: #484f58; }
-  .pipe-prod { background: #238636; }
-  .pipe-arrow {
-    color: #484f58;
-    font-size: 20px;
-    padding: 0 6px;
-  }
+  a { color: #58a6ff; }
+  a:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
-<div class="nav">
-  <a href="../">Portal</a> <span>/</span> <span>Modelo de Trabajo</span>
-</div>
-<div class="infographic">
+
+<div class="page-wrapper">
+
+  <!-- BREADCRUMB -->
+  <nav class="breadcrumb">
+    <a href="../">Portal</a>
+    <span class="sep">/</span>
+    <span>Modelo de Trabajo</span>
+  </nav>
 
   <!-- HEADER -->
-  <div class="header">
-    <div class="logo">GoEcosystemDH</div>
-    <h1>Modelo de Trabajo en GitHub</h1>
-    <div class="subtitle">Guia visual para desarrolladores &mdash; Marzo 2026</div>
-  </div>
+  <header class="page-header">
+    <div class="org-label">GoEcosystemDH</div>
+    <h1>Modelo de Trabajo en GitHub<br>Guia para Desarrolladores</h1>
+    <div class="subtitle">Todo lo que necesitas saber para trabajar con codigo en la organizacion &mdash; explicado paso a paso</div>
+  </header>
 
-  <!-- STATS -->
-  <div class="stats-bar">
-    <div class="stat">
-      <div class="value green">37</div>
-      <div class="label">Repos Migrados</div>
-    </div>
-    <div class="stat">
-      <div class="value">24</div>
-      <div class="label">Pipelines CI/CD</div>
-    </div>
-    <div class="stat">
-      <div class="value purple">91</div>
-      <div class="label">Repos Totales</div>
-    </div>
-    <div class="stat">
-      <div class="value orange">54</div>
-      <div class="label">Archivo Historico</div>
-    </div>
-  </div>
+  <!-- ============================================================ -->
+  <!-- SECTION 1: ANTES DE EMPEZAR -->
+  <!-- ============================================================ -->
+  <section class="section" id="antes-de-empezar">
+    <h2 class="section-title">
+      <span class="section-icon icon-blue">&#x1F3AC;</span>
+      Antes de Empezar
+    </h2>
 
-  <!-- PLATAFORMAS -->
-  <div class="section">
-    <div class="section-title">
-      <div class="icon icon-blue">&#x1F310;</div>
-      Nuestras 3 Plataformas
-    </div>
-    <div class="platforms">
-      <div class="platform-card">
-        <div class="name">Azure DevOps</div>
-        <div class="url">dev.azure.com/goecosystem</div>
-        <div class="desc">Planificacion: Epics, Features, User Stories, Tasks, Sprints</div>
-      </div>
-      <div class="platform-card">
-        <div class="name">GitHub</div>
-        <div class="url">github.com/GoEcosystemDH</div>
-        <div class="desc">Codigo fuente, Pull Requests, CI/CD con GitHub Actions</div>
-      </div>
-      <div class="platform-card">
-        <div class="name">Wiki</div>
-        <div class="url">wiki.goecosystemdh.com</div>
-        <div class="desc">Documentacion tecnica, guias, procesos y estandares</div>
-      </div>
-    </div>
-  </div>
+    <p>
+      Si vienes de trabajar con GitLab, lo principal que debes saber es que <strong>el codigo ahora vive en GitHub</strong>.
+      En lugar de entrar a <code>gitlab.com/...</code>, ahora entras a <code>github.com/GoEcosystemDH</code>.
+      Los conceptos son los mismos (repositorios, ramas, merge requests), pero algunos nombres cambian. Por ejemplo,
+      lo que en GitLab se llama "Merge Request", en GitHub se llama <strong>"Pull Request"</strong> (PR). Hacen exactamente lo mismo.
+    </p>
 
-  <!-- FLUJO DE DESARROLLO -->
-  <div class="section">
-    <div class="section-title">
-      <div class="icon icon-green">&#x1F504;</div>
-      Flujo de Desarrollo
+    <div class="callout callout-info">
+      <span class="callout-label">Dato clave</span>
+      Nuestro codigo fuente, Pull Requests y pipelines de CI/CD ahora estan en
+      <strong><a href="https://github.com/GoEcosystemDH" target="_blank">github.com/GoEcosystemDH</a></strong>.
+      La planificacion (sprints, tareas) sigue en Azure DevOps. La documentacion tecnica esta en la
+      <a href="https://wiki.goecosystemdh.com" target="_blank">Wiki</a>.
     </div>
-    <div class="flow-container">
-      <div class="flow-row">
+
+    <h3>Como clonar un repositorio desde GitHub</h3>
+    <p>
+      "Clonar" significa descargar una copia del codigo a tu computadora para poder trabajar en el.
+      Si antes escribias <code>git clone git@gitlab.com/...</code>, ahora solo cambia la direccion:
+    </p>
+
+    <div class="code-block">
+<span class="comment"># Ejemplo: clonar el proyecto "costos-api" a tu computadora</span>
+<span class="cmd">git clone git@github.com:GoEcosystemDH/costos-api.git</span>
+
+<span class="comment"># Entrar a la carpeta del proyecto</span>
+<span class="cmd">cd costos-api</span>
+
+<span class="comment"># Verificar que estas conectado al repositorio correcto</span>
+<span class="cmd">git remote -v</span>
+<span class="output"># origin  git@github.com:GoEcosystemDH/costos-api.git (fetch)</span>
+<span class="output"># origin  git@github.com:GoEcosystemDH/costos-api.git (push)</span>
+    </div>
+
+    <div class="callout callout-tip">
+      <span class="callout-label">Primer paso</span>
+      Antes de clonar, asegurate de tener tu entorno configurado: SSH keys, Git, y acceso a la organizacion.
+      La guia completa esta en la wiki.
+    </div>
+
+    <a href="https://wiki.goecosystemdh.com/s/onboarding/p/configuracion-del-entorno-NussHDlChA" target="_blank" class="norm-link">
+      Norma completa: Configuracion del Entorno &rarr;
+    </a>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 2: TU DIA A DIA EN 6 PASOS -->
+  <!-- ============================================================ -->
+  <section class="section" id="dia-a-dia">
+    <h2 class="section-title">
+      <span class="section-icon icon-green">&#x1F504;</span>
+      Tu Dia a Dia en 6 Pasos
+    </h2>
+
+    <p>
+      Cada vez que necesites agregar algo nuevo, corregir un error o hacer cualquier cambio en el codigo, vas a
+      seguir estos 6 pasos. Siempre. No importa si el cambio es grande o chico.
+    </p>
+
+    <!-- FLOW DIAGRAM -->
+    <div class="flow-diagram">
+      <div class="flow-steps">
         <div class="flow-step blue">
           <div class="step-num">Paso 1</div>
-          <div class="step-title">Clonar Repo</div>
-          <div class="step-desc">Desde GitHub</div>
+          <div class="step-title">Actualizar</div>
+          <div class="step-desc">Bajar lo mas reciente</div>
         </div>
-        <div class="flow-arrow">&#x2192;</div>
+        <div class="flow-arrow">&rarr;</div>
         <div class="flow-step purple">
           <div class="step-num">Paso 2</div>
-          <div class="step-title">Crear Branch</div>
-          <div class="step-desc">feature/* desde develop</div>
+          <div class="step-title">Crear rama</div>
+          <div class="step-desc">Tu espacio de trabajo</div>
         </div>
-        <div class="flow-arrow">&#x2192;</div>
+        <div class="flow-arrow">&rarr;</div>
         <div class="flow-step purple">
           <div class="step-num">Paso 3</div>
-          <div class="step-title">Commits</div>
-          <div class="step-desc">Conventional Commits</div>
+          <div class="step-title">Programar</div>
+          <div class="step-desc">Hacer cambios y guardar</div>
         </div>
-        <div class="flow-arrow">&#x2192;</div>
+        <div class="flow-arrow">&rarr;</div>
         <div class="flow-step blue">
           <div class="step-num">Paso 4</div>
-          <div class="step-title">Push + PR</div>
-          <div class="step-desc">Hacia develop</div>
+          <div class="step-title">Subir y pedir revision</div>
+          <div class="step-desc">Push + Pull Request</div>
         </div>
-        <div class="flow-arrow">&#x2192;</div>
+        <div class="flow-arrow">&rarr;</div>
         <div class="flow-step orange">
           <div class="step-num">Paso 5</div>
-          <div class="step-title">Code Review</div>
-          <div class="step-desc">Min. 1 approval</div>
+          <div class="step-title">Revision</div>
+          <div class="step-desc">Un companero revisa</div>
         </div>
-        <div class="flow-arrow">&#x2192;</div>
+        <div class="flow-arrow">&rarr;</div>
         <div class="flow-step green">
           <div class="step-num">Paso 6</div>
-          <div class="step-title">Merge</div>
-          <div class="step-desc">CI/CD automatico</div>
+          <div class="step-title">Integrar</div>
+          <div class="step-desc">Merge + deploy auto</div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- BRANCHES -->
-  <div class="section">
-    <div class="section-title">
-      <div class="icon icon-purple">&#x1F33F;</div>
-      Politica de Branches (GitFlow)
+    <!-- DETAILED STEPS -->
+    <ol class="step-list">
+      <li>
+        <strong>Actualizar tu copia local.</strong>
+        Antes de empezar, asegurate de tener la version mas reciente del codigo. Esto evita conflictos con los cambios de otros.
+      </li>
+      <li>
+        <strong>Crear una rama (branch).</strong>
+        Piensa en una rama como tu mesa de trabajo personal. Trabajas ahi sin afectar a nadie. Cuando termines,
+        pediras que integren tus cambios.
+      </li>
+      <li>
+        <strong>Programar y guardar tus avances (commits).</strong>
+        Haces tus cambios en el codigo y los vas "guardando" con mensajes descriptivos. Cada guardado se llama un <em>commit</em>.
+      </li>
+      <li>
+        <strong>Subir tu trabajo y pedir revision (Push + Pull Request).</strong>
+        "Push" sube tu rama a GitHub. Luego creas un "Pull Request" (PR): es como decir "ya termine, revisen por favor".
+      </li>
+      <li>
+        <strong>Revision por un companero (Code Review).</strong>
+        Al menos una persona del equipo revisa tu codigo. Te puede pedir cambios o aprobarlo.
+      </li>
+      <li>
+        <strong>Integrar (Merge).</strong>
+        Cuando tu PR es aprobado, se integra al codigo principal. Un robot automatico se encarga de compilar, probar y desplegar.
+      </li>
+    </ol>
+
+    <!-- SCENARIO -->
+    <div class="scenario-box">
+      <h4>Ejemplo real: Maria necesita agregar un boton de exportar PDF en el modulo de costos</h4>
+
+      <p style="color:#8b949e; font-size:13px; margin-bottom:12px;">
+        Maria recibio un ticket (COST-456) para agregar la funcionalidad de exportar reportes a PDF.
+        Estos son los comandos exactos que ejecutaria, desde el inicio hasta el final:
+      </p>
+
+      <div class="code-block">
+<span class="comment"># PASO 1: Actualizar su copia local</span>
+<span class="cmd">git checkout develop</span>
+<span class="cmd">git pull origin develop</span>
+
+<span class="comment"># PASO 2: Crear su rama de trabajo</span>
+<span class="cmd">git checkout -b feature/COST-456-export-pdf</span>
+
+<span class="comment"># PASO 3: Maria programa la funcionalidad...</span>
+<span class="comment"># (edita archivos, agrega el boton, la logica de PDF, etc.)</span>
+<span class="comment"># Cuando tiene un avance significativo, guarda (commit):</span>
+<span class="cmd">git add src/components/ExportButton.tsx</span>
+<span class="cmd">git commit -m "feat(costos): add PDF export button to report view"</span>
+
+<span class="comment"># Maria sigue trabajando y hace otro commit:</span>
+<span class="cmd">git add src/services/pdfGenerator.ts src/utils/formatReport.ts</span>
+<span class="cmd">git commit -m "feat(costos): implement PDF generation service"</span>
+
+<span class="comment"># PASO 4: Subir la rama a GitHub y crear Pull Request</span>
+<span class="cmd">git push -u origin feature/COST-456-export-pdf</span>
+<span class="comment"># Luego va a GitHub y crea el Pull Request desde la interfaz web</span>
+<span class="comment"># (o usa el link que Git le muestra en la terminal)</span>
+
+<span class="comment"># PASO 5: Su companero Carlos revisa el PR y lo aprueba</span>
+
+<span class="comment"># PASO 6: Maria (o Carlos) hacen click en "Merge" en GitHub</span>
+<span class="comment"># El pipeline automatico compila, prueba y despliega</span>
+
+<span class="comment"># Despues del merge, Maria limpia su rama local:</span>
+<span class="cmd">git checkout develop</span>
+<span class="cmd">git pull origin develop</span>
+<span class="cmd">git branch -d feature/COST-456-export-pdf</span>
+      </div>
     </div>
-    <div class="branches-diagram">
+
+    <a href="https://wiki.goecosystemdh.com/s/onboarding/p/flujo-de-trabajo-WWqUs6hWut" target="_blank" class="norm-link">
+      Norma completa: Flujo de Trabajo &rarr;
+    </a>
+    &nbsp;
+    <a href="https://wiki.goecosystemdh.com/s/onboarding/p/guia-de-contribucion-WFTINVLKui" target="_blank" class="norm-link">
+      Norma completa: Guia de Contribucion &rarr;
+    </a>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 3: LAS RAMAS (BRANCHES) -->
+  <!-- ============================================================ -->
+  <section class="section" id="branches">
+    <h2 class="section-title">
+      <span class="section-icon icon-purple">&#x1F33F;</span>
+      Las Ramas (Branches) &mdash; ¿Por que no puedo subir directo a main?
+    </h2>
+
+    <p>
+      Imaginate un restaurante. <strong>main</strong> es el restaurante abierto al publico: todo lo que esta ahi
+      debe funcionar perfectamente porque los clientes lo estan usando. <strong>develop</strong> es la cocina,
+      donde los chefs prueban platos nuevos antes de servirlos. Y tu <strong>feature</strong> es tu mesa de trabajo
+      personal en la cocina, donde preparas tu receta sin molestar a los demas.
+    </p>
+
+    <p>
+      No puedes subir directo a <code>main</code> porque seria como servir un plato a medio preparar a un cliente.
+      Primero lo pruebas en tu mesa (feature), despues pasa a la cocina general (develop), y finalmente,
+      cuando esta listo, se sirve al publico (main).
+    </p>
+
+    <div class="branch-card">
       <div class="branch-row main">
-        <span class="branch-name main">main</span>
-        <span class="branch-desc">Produccion &mdash; Solo recibe merges de release/* y hotfix/*</span>
-        <span class="branch-protection badge-locked">Bloqueada</span>
+        <span class="branch-name c-main">main</span>
+        <span class="branch-desc"><strong>El restaurante abierto (produccion).</strong> Solo recibe codigo ya probado y aprobado, via release/* o hotfix/*.</span>
+        <span class="branch-badge badge-locked">Bloqueada</span>
       </div>
       <div class="branch-row develop">
-        <span class="branch-name develop">develop</span>
-        <span class="branch-desc">Integracion &mdash; Aqui convergen todas las features terminadas</span>
-        <span class="branch-protection badge-pr">PR Requerido</span>
+        <span class="branch-name c-develop">develop</span>
+        <span class="branch-desc"><strong>La cocina (integracion).</strong> Aqui se juntan todas las funcionalidades terminadas antes de ir a produccion.</span>
+        <span class="branch-badge badge-pr">PR Requerido</span>
       </div>
       <div class="branch-row feature">
-        <span class="branch-name feature">feature/*</span>
-        <span class="branch-desc">Nuevas funcionalidades &mdash; Se crea desde develop, se mergea a develop</span>
-        <span class="branch-protection badge-open">Abierta</span>
+        <span class="branch-name c-feature">feature/*</span>
+        <span class="branch-desc"><strong>Tu mesa de trabajo.</strong> Creas una para cada tarea. Se crea desde develop y vuelve a develop.</span>
+        <span class="branch-badge badge-open">Libre</span>
       </div>
       <div class="branch-row release">
-        <span class="branch-name release">release/*</span>
-        <span class="branch-desc">Preparacion de release &mdash; Desde develop, se mergea a main y develop</span>
-        <span class="branch-protection badge-pr">PR Requerido</span>
+        <span class="branch-name c-release">release/*</span>
+        <span class="branch-desc"><strong>El plato listo para servir.</strong> Prepara una version para produccion. Va a main y a develop.</span>
+        <span class="branch-badge badge-pr">PR Requerido</span>
       </div>
       <div class="branch-row hotfix">
-        <span class="branch-name hotfix">hotfix/*</span>
-        <span class="branch-desc">Fixes urgentes en produccion &mdash; Desde main, se mergea a main y develop</span>
-        <span class="branch-protection badge-pr">PR Requerido</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="two-cols">
-    <!-- CONVENTIONAL COMMITS -->
-    <div class="section">
-      <div class="section-title">
-        <div class="icon icon-orange">&#x1F4DD;</div>
-        Conventional Commits
-      </div>
-      <div class="commit-format">
-        <div class="commit-example">
-          <span class="type">feat</span><span class="scope">(auth)</span>: <span class="desc">add SSO login endpoint</span><br>
-          <span class="type">fix</span><span class="scope">(api)</span>: <span class="desc">resolve null pointer in user service</span><br>
-          <span class="type">docs</span><span class="scope">(readme)</span>: <span class="desc">update installation steps</span>
-        </div>
-        <div class="commit-types">
-          <div class="commit-type"><code>feat</code><span>Nueva funcion</span></div>
-          <div class="commit-type"><code>fix</code><span>Correccion bug</span></div>
-          <div class="commit-type"><code>docs</code><span>Documentacion</span></div>
-          <div class="commit-type"><code>refactor</code><span>Refactorizacion</span></div>
-          <div class="commit-type"><code>test</code><span>Tests</span></div>
-          <div class="commit-type"><code>chore</code><span>Mantenimiento</span></div>
-          <div class="commit-type"><code>ci</code><span>CI/CD</span></div>
-          <div class="commit-type"><code>perf</code><span>Rendimiento</span></div>
-        </div>
+        <span class="branch-name c-hotfix">hotfix/*</span>
+        <span class="branch-desc"><strong>Emergencia en produccion.</strong> Correccion urgente. Se crea desde main y va a main y develop.</span>
+        <span class="branch-badge badge-pr">PR Requerido</span>
       </div>
     </div>
 
-    <!-- PR WORKFLOW -->
-    <div class="section">
-      <div class="section-title">
-        <div class="icon icon-blue">&#x1F50D;</div>
-        Workflow de Pull Request
-      </div>
-      <div class="pr-workflow">
-        <div class="pr-step">
-          <div class="pr-num">1</div>
-          <div class="pr-content">
-            <div class="title">Crear Pull Request</div>
-            <div class="detail">Desde tu feature branch hacia develop</div>
-          </div>
-        </div>
-        <div class="pr-step">
-          <div class="pr-num">2</div>
-          <div class="pr-content">
-            <div class="title">Checks Automaticos</div>
-            <div class="detail">Lint, Tests, Build, Conventional Commits</div>
-          </div>
-        </div>
-        <div class="pr-step">
-          <div class="pr-num">3</div>
-          <div class="pr-content">
-            <div class="title">Code Review</div>
-            <div class="detail">Minimo 1 approval (2 para arquitectura)</div>
-          </div>
-        </div>
-        <div class="pr-step">
-          <div class="pr-num">4</div>
-          <div class="pr-content">
-            <div class="title">Merge a develop</div>
-            <div class="detail">Pipeline CI/CD se ejecuta automaticamente</div>
-          </div>
-        </div>
-        <div class="pr-step">
-          <div class="pr-num">5</div>
-          <div class="pr-content">
-            <div class="title">Deploy a Staging</div>
-            <div class="detail">Automatico tras merge a develop</div>
-          </div>
-        </div>
-        <div class="pr-step">
-          <div class="pr-num">6</div>
-          <div class="pr-content">
-            <div class="title">Release a Produccion</div>
-            <div class="detail">Via release/* branch con aprobacion</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Rama</th>
+          <th>Para que sirve</th>
+          <th>Quien puede escribir</th>
+          <th>Ejemplo de nombre</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>main</code></td>
+          <td>Codigo en produccion (lo que usan los usuarios)</td>
+          <td>Nadie directamente &mdash; solo via merge</td>
+          <td><code>main</code></td>
+        </tr>
+        <tr>
+          <td><code>develop</code></td>
+          <td>Integracion de funcionalidades terminadas</td>
+          <td>Solo via Pull Request aprobado</td>
+          <td><code>develop</code></td>
+        </tr>
+        <tr>
+          <td><code>feature/*</code></td>
+          <td>Desarrollar una funcionalidad nueva</td>
+          <td>El desarrollador asignado</td>
+          <td><code>feature/COST-456-export-pdf</code></td>
+        </tr>
+        <tr>
+          <td><code>release/*</code></td>
+          <td>Preparar una version para produccion</td>
+          <td>Lider tecnico / DevOps</td>
+          <td><code>release/2.4.0</code></td>
+        </tr>
+        <tr>
+          <td><code>hotfix/*</code></td>
+          <td>Corregir un error urgente en produccion</td>
+          <td>El desarrollador asignado + aprobacion rapida</td>
+          <td><code>hotfix/fix-login-crash</code></td>
+        </tr>
+      </tbody>
+    </table>
 
-  <!-- PIPELINE CI/CD -->
-  <div class="section" style="margin-top: 24px;">
-    <div class="section-title">
-      <div class="icon icon-green">&#x1F680;</div>
-      Pipeline CI/CD (GitHub Actions)
+    <a href="https://wiki.goecosystemdh.com/s/onboarding/p/politica-de-branches-aAVSdEGYLz" target="_blank" class="norm-link">
+      Norma completa: Politica de Branches &rarr;
+    </a>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 4: MENSAJES DE COMMIT -->
+  <!-- ============================================================ -->
+  <section class="section" id="commits">
+    <h2 class="section-title">
+      <span class="section-icon icon-orange">&#x1F4DD;</span>
+      Mensajes de Commit &mdash; El formato obligatorio
+    </h2>
+
+    <p>
+      Un <strong>commit</strong> es como "guardar tu trabajo" con una descripcion de lo que hiciste.
+      Piensa en ello como el historial de cambios: si algo se rompe, podemos ver exactamente que se cambio y por que.
+    </p>
+    <p>
+      Para que todos entendamos los mensajes de la misma forma, usamos un formato estandar llamado
+      <strong>Conventional Commits</strong>. Es simple: escribes el <em>tipo</em> de cambio, el <em>modulo</em> donde lo hiciste,
+      y una <em>descripcion</em> corta.
+    </p>
+
+    <h3>El formato</h3>
+
+    <div class="commit-box">
+      <div class="commit-example">
+<span class="type">tipo</span><span class="scope">(modulo)</span>: <span class="desc">descripcion breve de lo que hiciste</span>
+      </div>
+
+      <p style="font-size:13px; color:#8b949e; margin-bottom:16px;">
+        <strong style="color:#d29922;">tipo</strong> = que clase de cambio es &nbsp;|&nbsp;
+        <strong style="color:#bc8cff;">modulo</strong> = en que parte del proyecto &nbsp;|&nbsp;
+        <strong style="color:#e6edf3;">descripcion</strong> = que hiciste, en pocas palabras
+      </p>
     </div>
-    <div class="flow-container">
+
+    <h3>Tipos de commit con ejemplos reales</h3>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Tipo</th>
+          <th>Significado</th>
+          <th>Ejemplo real</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>feat</code></td>
+          <td>Funcionalidad nueva</td>
+          <td><code>feat(costos): add PDF export to report view</code></td>
+        </tr>
+        <tr>
+          <td><code>fix</code></td>
+          <td>Correccion de un error</td>
+          <td><code>fix(his): resolve null pointer in patient search</code></td>
+        </tr>
+        <tr>
+          <td><code>docs</code></td>
+          <td>Cambios en documentacion</td>
+          <td><code>docs(rcf): update API endpoint documentation</code></td>
+        </tr>
+        <tr>
+          <td><code>refactor</code></td>
+          <td>Reorganizar codigo sin cambiar funcionalidad</td>
+          <td><code>refactor(citapp): extract date validation to utility</code></td>
+        </tr>
+        <tr>
+          <td><code>test</code></td>
+          <td>Agregar o modificar pruebas</td>
+          <td><code>test(costos): add unit tests for invoice calculator</code></td>
+        </tr>
+        <tr>
+          <td><code>chore</code></td>
+          <td>Tareas de mantenimiento</td>
+          <td><code>chore(his): upgrade Spring Boot to 3.2</code></td>
+        </tr>
+        <tr>
+          <td><code>ci</code></td>
+          <td>Cambios en el pipeline automatico</td>
+          <td><code>ci(rcf): add SonarQube step to pipeline</code></td>
+        </tr>
+        <tr>
+          <td><code>perf</code></td>
+          <td>Mejora de rendimiento</td>
+          <td><code>perf(citapp): optimize appointment query with index</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Mal vs. Bien</h3>
+
+    <div class="example-row">
+      <div class="example-wrong">
+        <div class="label">MAL</div>
+        <code>git commit -m "cambios"</code>
+        <code>git commit -m "fix bug"</code>
+        <code>git commit -m "wip"</code>
+        <code>git commit -m "update file"</code>
+      </div>
+      <div class="example-right">
+        <div class="label">BIEN</div>
+        <code>git commit -m "feat(costos): add PDF export button"</code>
+        <code>git commit -m "fix(his): resolve timeout on patient search"</code>
+        <code>git commit -m "refactor(rcf): simplify claim validation logic"</code>
+        <code>git commit -m "test(citapp): add tests for appointment flow"</code>
+      </div>
+    </div>
+
+    <div class="callout callout-warning">
+      <span class="callout-label">Importante</span>
+      Si tu mensaje no sigue el formato, el pipeline automatico lo va a rechazar. No es opcional &mdash; es un
+      check automatico que valida cada commit.
+    </div>
+
+    <a href="https://wiki.goecosystemdh.com/s/onboarding/p/conventional-commits-guia-para-desarrolladores-D2TQnLlk7M" target="_blank" class="norm-link">
+      Norma completa: Conventional Commits &rarr;
+    </a>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 5: PULL REQUESTS -->
+  <!-- ============================================================ -->
+  <section class="section" id="pull-requests">
+    <h2 class="section-title">
+      <span class="section-icon icon-blue">&#x1F50D;</span>
+      Pull Requests &mdash; Pedir revision antes de integrar
+    </h2>
+
+    <p>
+      Un <strong>Pull Request (PR)</strong> es como decir: "Ya termine mi trabajo. Por favor, revisen antes de publicar."
+      Es obligatorio: <strong>nadie puede subir codigo directamente sin que al menos otra persona lo revise</strong>.
+      Esto nos protege de errores, mejora la calidad del codigo y ayuda a compartir conocimiento en el equipo.
+    </p>
+
+    <h3>El proceso paso a paso</h3>
+
+    <div class="scenario-box">
+      <div class="pr-flow-step">
+        <div class="pr-flow-num">1</div>
+        <div class="pr-flow-content">
+          <div class="pf-title">Creas el Pull Request</div>
+          <div class="pf-detail">Desde tu rama feature hacia develop. Llenas el titulo y la descripcion usando el template.</div>
+        </div>
+      </div>
+      <div class="pr-flow-step">
+        <div class="pr-flow-num">2</div>
+        <div class="pr-flow-content">
+          <div class="pf-title">Checks automaticos</div>
+          <div class="pf-detail">Un robot verifica tu codigo: que compile, pase las pruebas, cumpla el formato de commits, y no tenga errores de estilo.</div>
+        </div>
+      </div>
+      <div class="pr-flow-step">
+        <div class="pr-flow-num">3</div>
+        <div class="pr-flow-content">
+          <div class="pf-title">Code Review por un companero</div>
+          <div class="pf-detail">Al menos una persona revisa tu codigo linea por linea. Puede aprobar, pedir cambios, o hacer preguntas.</div>
+        </div>
+      </div>
+      <div class="pr-flow-step">
+        <div class="pr-flow-num">4</div>
+        <div class="pr-flow-content">
+          <div class="pf-title">Merge</div>
+          <div class="pf-detail">Cuando todo esta aprobado y los checks pasan, se integra tu codigo a develop. El pipeline se encarga del resto.</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Ejemplo de un buen PR</h3>
+
+    <div class="pr-example">
+      <div class="pr-title">feat(costos): add PDF export to report view</div>
+      <div class="pr-desc">
+        <strong>¿Que hace este PR?</strong><br>
+        Agrega un boton "Exportar PDF" en la vista de reportes del modulo de costos.
+        Al hacer click, genera un PDF con el reporte actual usando la libreria jsPDF.<br><br>
+        <strong>¿Como probarlo?</strong><br>
+        1. Ir a Costos > Reportes > Seleccionar cualquier reporte<br>
+        2. Click en "Exportar PDF"<br>
+        3. Verificar que el PDF descargado contiene los datos del reporte<br><br>
+        <strong>Ticket:</strong> COST-456
+      </div>
+    </div>
+
+    <h3>Reglas de aprobacion</h3>
+
+    <table class="approval-table">
+      <thead>
+        <tr>
+          <th>Tipo de cambio</th>
+          <th>Aprobaciones necesarias</th>
+          <th>Quien aprueba</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Funcionalidad normal, bug fix, docs</td>
+          <td><strong>1 aprobacion</strong></td>
+          <td>Cualquier miembro del equipo</td>
+        </tr>
+        <tr>
+          <td>Cambio de arquitectura, modelos de datos, APIs publicas</td>
+          <td><strong>2 aprobaciones</strong></td>
+          <td>Al menos 1 lider tecnico o arquitecto</td>
+        </tr>
+        <tr>
+          <td>Hotfix (emergencia en produccion)</td>
+          <td><strong>1 aprobacion</strong></td>
+          <td>Lider tecnico o DevOps</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-tip">
+      <span class="callout-label">Para revisores</span>
+      Si te toca revisar un PR, la wiki tiene un checklist detallado de que verificar y consejos
+      para dar retroalimentacion constructiva.
+    </div>
+
+    <a href="https://wiki.goecosystemdh.com/s/onboarding/p/templates-de-pull-request-SivTmXbX9D" target="_blank" class="norm-link">
+      Templates de Pull Request &rarr;
+    </a>
+    &nbsp;
+    <a href="https://wiki.goecosystemdh.com/s/onboarding/p/checklist-de-code-review-ICKPtRDiZP" target="_blank" class="norm-link">
+      Checklist Code Review &rarr;
+    </a>
+    &nbsp;
+    <a href="https://wiki.goecosystemdh.com/s/onboarding/p/guia-para-reviewers-79sEsGdimT" target="_blank" class="norm-link">
+      Guia para Reviewers &rarr;
+    </a>
+    &nbsp;
+    <a href="https://wiki.goecosystemdh.com/s/onboarding/p/reglas-de-aprobacion-por-tipo-de-cambio-eRVDxhEOie" target="_blank" class="norm-link">
+      Reglas de Aprobacion &rarr;
+    </a>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 6: EL PIPELINE -->
+  <!-- ============================================================ -->
+  <section class="section" id="pipeline">
+    <h2 class="section-title">
+      <span class="section-icon icon-green">&#x1F680;</span>
+      El Pipeline &mdash; ¿Que pasa cuando hago merge?
+    </h2>
+
+    <p>
+      Cuando tu codigo se aprueba y se integra (merge), <strong>no tienes que hacer nada mas</strong>.
+      Un proceso automatico (llamado "pipeline") se encarga de todo lo demas: compilar tu codigo,
+      ejecutar las pruebas, y desplegarlo. Piensa en ello como una linea de ensamblaje en una fabrica:
+      tu entregas la pieza terminada y la maquina se encarga de armarla, revisarla y empaquetarla.
+    </p>
+
+    <div class="flow-diagram">
       <div class="pipeline-flow">
         <div class="pipe-stage pipe-build">
           <div class="pipe-title">Build</div>
-          <div class="pipe-desc">Compilar + Docker</div>
+          <div class="pipe-desc">Compilar el codigo</div>
         </div>
-        <div class="pipe-arrow">&#x2192;</div>
+        <div class="pipe-arrow">&rarr;</div>
         <div class="pipe-stage pipe-test">
           <div class="pipe-title">Test</div>
-          <div class="pipe-desc">Lint + Unit + Scan</div>
+          <div class="pipe-desc">Ejecutar pruebas automaticas</div>
         </div>
-        <div class="pipe-arrow">&#x2192;</div>
+        <div class="pipe-arrow">&rarr;</div>
         <div class="pipe-stage pipe-staging">
           <div class="pipe-title">Staging</div>
-          <div class="pipe-desc">Deploy automatico</div>
+          <div class="pipe-desc">Desplegar en ambiente de pruebas</div>
         </div>
-        <div class="pipe-arrow">&#x2192;</div>
+        <div class="pipe-arrow">&rarr;</div>
         <div class="pipe-stage pipe-approve">
-          <div class="pipe-title">Approval</div>
-          <div class="pipe-desc">Revision manual</div>
+          <div class="pipe-title">Aprobacion</div>
+          <div class="pipe-desc">Alguien autoriza el pase</div>
         </div>
-        <div class="pipe-arrow">&#x2192;</div>
+        <div class="pipe-arrow">&rarr;</div>
         <div class="pipe-stage pipe-prod">
           <div class="pipe-title">Produccion</div>
-          <div class="pipe-desc">Zero-downtime</div>
+          <div class="pipe-desc">En vivo para los usuarios</div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- QUICK REFERENCE -->
-  <div class="section">
-    <div class="section-title">
-      <div class="icon icon-red">&#x26A1;</div>
-      Referencia Rapida de Comandos
+    <h3>¿Que pasa en cada etapa?</h3>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Etapa</th>
+          <th>¿Que hace?</th>
+          <th>¿Necesitas hacer algo?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Build</strong></td>
+          <td>Compila tu codigo y genera el paquete (como convertir ingredientes en un plato armado). Tambien crea la imagen Docker si aplica.</td>
+          <td>No. Es automatico.</td>
+        </tr>
+        <tr>
+          <td><strong>Test</strong></td>
+          <td>Ejecuta todas las pruebas automaticas (unitarias, de estilo, de seguridad). Si algo falla, te avisa.</td>
+          <td>Solo si falla: corrige y vuelve a subir.</td>
+        </tr>
+        <tr>
+          <td><strong>Staging</strong></td>
+          <td>Despliega tu codigo en un ambiente de pruebas identico a produccion. Sirve para probar antes de que llegue a los usuarios reales.</td>
+          <td>No. Es automatico.</td>
+        </tr>
+        <tr>
+          <td><strong>Aprobacion</strong></td>
+          <td>Un lider tecnico o el equipo de QA verifica que todo se ve bien en staging antes de pasar a produccion.</td>
+          <td>Solo si eres el aprobador.</td>
+        </tr>
+        <tr>
+          <td><strong>Produccion</strong></td>
+          <td>Tu codigo llega a los usuarios reales. El despliegue se hace sin interrumpir el servicio (zero-downtime).</td>
+          <td>No. Es automatico.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-info">
+      <span class="callout-label">Si algo falla</span>
+      Cuando una etapa falla, recibiras una notificacion. Ve al PR en GitHub, revisa los logs del check
+      que fallo, corrige tu codigo, y sube un nuevo commit. El pipeline se vuelve a ejecutar automaticamente.
     </div>
-    <div class="quick-ref">
+
+    <a href="https://wiki.goecosystemdh.com/s/onboarding/p/pipeline-ci-cd-reutilizable-3fhlluWVtp" target="_blank" class="norm-link">
+      Norma completa: Pipeline CI/CD Reutilizable &rarr;
+    </a>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 7: REFERENCIA RAPIDA DE COMANDOS -->
+  <!-- ============================================================ -->
+  <section class="section" id="comandos">
+    <h2 class="section-title">
+      <span class="section-icon icon-red">&#x26A1;</span>
+      Referencia Rapida de Comandos
+    </h2>
+
+    <p>
+      Estos son los comandos de Git que usaras con mas frecuencia. Estan organizados por el momento
+      en el que los necesitas. Si no recuerdas alguno, vuelve aqui.
+    </p>
+
+    <!-- Empezar a trabajar -->
+    <div class="cmd-group">
+      <h4>Empezar a trabajar</h4>
       <div class="cmd-row">
-        <span class="cmd-desc">Clonar repositorio</span>
+        <span class="cmd-label">Clonar un repo (primera vez)</span>
         <span class="cmd-code">git clone git@github.com:GoEcosystemDH/mi-repo.git</span>
       </div>
       <div class="cmd-row">
-        <span class="cmd-desc">Crear feature branch</span>
-        <span class="cmd-code">git checkout develop && git pull && git checkout -b feature/TICKET-123-descripcion</span>
+        <span class="cmd-label">Ir a la rama develop</span>
+        <span class="cmd-code">git checkout develop</span>
       </div>
       <div class="cmd-row">
-        <span class="cmd-desc">Commit con convencion</span>
+        <span class="cmd-label">Bajar lo mas reciente</span>
+        <span class="cmd-code">git pull origin develop</span>
+      </div>
+      <div class="cmd-row">
+        <span class="cmd-label">Crear tu rama de trabajo</span>
+        <span class="cmd-code">git checkout -b feature/TICKET-123-mi-cambio</span>
+      </div>
+    </div>
+
+    <!-- Guardar mi trabajo -->
+    <div class="cmd-group">
+      <h4>Guardar mi trabajo</h4>
+      <div class="cmd-row">
+        <span class="cmd-label">Ver que archivos cambiaste</span>
+        <span class="cmd-code">git status</span>
+      </div>
+      <div class="cmd-row">
+        <span class="cmd-label">Ver los cambios en detalle</span>
+        <span class="cmd-code">git diff</span>
+      </div>
+      <div class="cmd-row">
+        <span class="cmd-label">Agregar archivos al commit</span>
+        <span class="cmd-code">git add src/mi-archivo.ts</span>
+      </div>
+      <div class="cmd-row">
+        <span class="cmd-label">Guardar con mensaje</span>
         <span class="cmd-code">git commit -m "feat(modulo): descripcion del cambio"</span>
       </div>
-      <div class="cmd-row">
-        <span class="cmd-desc">Push y crear PR</span>
-        <span class="cmd-code">git push -u origin feature/TICKET-123-descripcion</span>
-      </div>
-      <div class="cmd-row">
-        <span class="cmd-desc">Actualizar develop local</span>
-        <span class="cmd-code">git checkout develop && git pull origin develop</span>
-      </div>
-      <div class="cmd-row">
-        <span class="cmd-desc">Despues del merge, limpiar</span>
-        <span class="cmd-code">git branch -d feature/TICKET-123-descripcion</span>
-      </div>
     </div>
-  </div>
 
-  <!-- FOOTER -->
-  <div class="footer-section">
-    <a href="https://wiki.goecosystemdh.com/onboarding/yBo0v69HmI" class="wiki-cta">
-      Ir a la Wiki de Onboarding
-    </a>
-    <div class="footer-links">
-      <a href="https://github.com/GoEcosystemDH" class="footer-link">GitHub: github.com/GoEcosystemDH</a>
-      <a href="https://wiki.goecosystemdh.com" class="footer-link">Wiki: wiki.goecosystemdh.com</a>
-      <a href="https://dev.azure.com/goecosystem/Go-Devops" class="footer-link">AzDO: dev.azure.com/goecosystem</a>
+    <!-- Pedir revision -->
+    <div class="cmd-group">
+      <h4>Pedir revision</h4>
+      <div class="cmd-row">
+        <span class="cmd-label">Subir tu rama a GitHub</span>
+        <span class="cmd-code">git push -u origin feature/TICKET-123-mi-cambio</span>
+      </div>
+      <div class="cmd-row">
+        <span class="cmd-label">Crear PR desde terminal (opcional)</span>
+        <span class="cmd-code">gh pr create --base develop --title "feat(modulo): descripcion"</span>
+      </div>
     </div>
-    <div class="footer-note" style="margin-top:12px"><a href="../" style="color:#58a6ff;text-decoration:none">&#x2190; Volver al Portal</a> &middot; <a href="../homologacion/" style="color:#58a6ff;text-decoration:none">Tabla de Homologacion</a></div>
-    <div class="footer-note">Equipo DevOps &mdash; GoEcosystemDH &mdash; Marzo 2026</div>
-  </div>
+
+    <!-- Despues del merge -->
+    <div class="cmd-group">
+      <h4>Despues del merge</h4>
+      <div class="cmd-row">
+        <span class="cmd-label">Volver a develop</span>
+        <span class="cmd-code">git checkout develop</span>
+      </div>
+      <div class="cmd-row">
+        <span class="cmd-label">Actualizar develop</span>
+        <span class="cmd-code">git pull origin develop</span>
+      </div>
+      <div class="cmd-row">
+        <span class="cmd-label">Borrar tu rama local (ya no la necesitas)</span>
+        <span class="cmd-code">git branch -d feature/TICKET-123-mi-cambio</span>
+      </div>
+    </div>
+
+    <!-- Si necesitas actualizar tu rama -->
+    <div class="cmd-group">
+      <h4>Si tu rama se desactualizo</h4>
+      <div class="cmd-row">
+        <span class="cmd-label">Traer los cambios nuevos a tu rama</span>
+        <span class="cmd-code">git checkout feature/TICKET-123-mi-cambio && git merge develop</span>
+      </div>
+    </div>
+
+    <a href="https://wiki.goecosystemdh.com/s/onboarding/p/cheat-sheet-comandos-del-dia-a-dia-s01dTx5Vtv" target="_blank" class="norm-link">
+      Norma completa: Cheat Sheet Comandos &rarr;
+    </a>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 8: NECESITAS AYUDA -->
+  <!-- ============================================================ -->
+  <section class="section" id="ayuda">
+    <h2 class="section-title">
+      <span class="section-icon icon-teal">&#x1F4DA;</span>
+      ¿Necesitas Ayuda?
+    </h2>
+
+    <p>
+      Toda la documentacion detallada esta en la wiki. Aqui tienes enlaces directos organizados por tema.
+      Si algo no queda claro o no encuentras la respuesta, contacta al equipo DevOps.
+    </p>
+
+    <div class="help-grid">
+      <a href="https://wiki.goecosystemdh.com/s/onboarding/p/configuracion-del-entorno-NussHDlChA" target="_blank" class="help-card">
+        <div class="help-title">Configuracion del Entorno</div>
+        <div class="help-desc">SSH keys, Git, acceso a la org, herramientas necesarias</div>
+      </a>
+      <a href="https://wiki.goecosystemdh.com/s/onboarding/p/flujo-de-trabajo-WWqUs6hWut" target="_blank" class="help-card">
+        <div class="help-title">Flujo de Trabajo</div>
+        <div class="help-desc">El proceso completo de desarrollo paso a paso</div>
+      </a>
+      <a href="https://wiki.goecosystemdh.com/s/onboarding/p/politica-de-branches-aAVSdEGYLz" target="_blank" class="help-card">
+        <div class="help-title">Politica de Branches</div>
+        <div class="help-desc">Reglas sobre ramas, protecciones y convenciones de nombres</div>
+      </a>
+      <a href="https://wiki.goecosystemdh.com/s/onboarding/p/conventional-commits-guia-para-desarrolladores-D2TQnLlk7M" target="_blank" class="help-card">
+        <div class="help-title">Conventional Commits</div>
+        <div class="help-desc">Formato obligatorio para mensajes de commit</div>
+      </a>
+      <a href="https://wiki.goecosystemdh.com/s/onboarding/p/guia-de-contribucion-WFTINVLKui" target="_blank" class="help-card">
+        <div class="help-title">Guia de Contribucion</div>
+        <div class="help-desc">Como contribuir codigo a la organizacion</div>
+      </a>
+      <a href="https://wiki.goecosystemdh.com/s/onboarding/p/templates-de-pull-request-SivTmXbX9D" target="_blank" class="help-card">
+        <div class="help-title">Templates de Pull Request</div>
+        <div class="help-desc">Plantillas y estructura para crear PRs claros</div>
+      </a>
+      <a href="https://wiki.goecosystemdh.com/s/onboarding/p/checklist-de-code-review-ICKPtRDiZP" target="_blank" class="help-card">
+        <div class="help-title">Checklist Code Review</div>
+        <div class="help-desc">Que verificar al revisar codigo de un companero</div>
+      </a>
+      <a href="https://wiki.goecosystemdh.com/s/onboarding/p/guia-para-reviewers-79sEsGdimT" target="_blank" class="help-card">
+        <div class="help-title">Guia para Reviewers</div>
+        <div class="help-desc">Como dar retroalimentacion constructiva en code reviews</div>
+      </a>
+      <a href="https://wiki.goecosystemdh.com/s/onboarding/p/reglas-de-aprobacion-por-tipo-de-cambio-eRVDxhEOie" target="_blank" class="help-card">
+        <div class="help-title">Reglas de Aprobacion</div>
+        <div class="help-desc">Cuantas aprobaciones necesitas segun el tipo de cambio</div>
+      </a>
+      <a href="https://wiki.goecosystemdh.com/s/onboarding/p/estandares-de-codigo-V6PXLKEH2c" target="_blank" class="help-card">
+        <div class="help-title">Estandares de Codigo</div>
+        <div class="help-desc">Convenciones de estilo, nombrado y estructura</div>
+      </a>
+      <a href="https://wiki.goecosystemdh.com/s/onboarding/p/pipeline-ci-cd-reutilizable-3fhlluWVtp" target="_blank" class="help-card">
+        <div class="help-title">Pipeline CI/CD Reutilizable</div>
+        <div class="help-desc">Como funciona el pipeline automatico de compilacion y despliegue</div>
+      </a>
+      <a href="https://wiki.goecosystemdh.com/s/onboarding/p/cheat-sheet-comandos-del-dia-a-dia-s01dTx5Vtv" target="_blank" class="help-card">
+        <div class="help-title">Cheat Sheet Comandos</div>
+        <div class="help-desc">Comandos de Git mas usados con explicaciones</div>
+      </a>
+    </div>
+
+    <div class="callout callout-info">
+      <span class="callout-label">¿Tienes dudas?</span>
+      Consulta la <a href="https://wiki.goecosystemdh.com" target="_blank">wiki</a> o contacta al equipo DevOps.
+      Estamos para ayudarte.
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- FOOTER -->
+  <!-- ============================================================ -->
+  <footer class="page-footer">
+    <nav class="footer-nav">
+      <a href="../">&larr; Volver al Portal</a>
+      <a href="../homologacion/">Tabla de Homologacion</a>
+      <a href="https://github.com/GoEcosystemDH" target="_blank">GitHub: GoEcosystemDH</a>
+      <a href="https://wiki.goecosystemdh.com" target="_blank">Wiki</a>
+    </nav>
+    <div class="footer-credit">Equipo DevOps &mdash; GoEcosystemDH &mdash; Marzo 2026</div>
+  </footer>
 
 </div>
+
 </body>
 </html>
