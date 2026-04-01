@@ -1,11 +1,160 @@
-name: "Auto PR: develop → main"
+name: "Auto PR: develop → main (reusable)"
 
 on:
-  push:
-    branches:
-      - develop
+  workflow_call:
+    inputs:
+      base_branch:
+        description: "Target branch for the PR"
+        required: false
+        type: string
+        default: "main"
+      source_branch:
+        description: "Source branch for the PR"
+        required: false
+        type: string
+        default: "develop"
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
 
 jobs:
-  auto-pr:
-    uses: GoEcosystemDH/.github/.github/workflows/auto-pr-to-main.yml@main
-    secrets: inherit
+  create-or-update-pr:
+    name: Sync develop → main
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ inputs.source_branch }}
+
+      - name: Check for diff and create/update PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const source = '${{ inputs.source_branch }}';
+            const base = '${{ inputs.base_branch }}';
+
+            // Check if there are commits ahead
+            let comparison;
+            try {
+              comparison = await github.rest.repos.compareCommitsWithBasehead({
+                owner, repo,
+                basehead: `${base}...${source}`
+              });
+            } catch (e) {
+              console.log(`Cannot compare branches: ${e.message}`);
+              return;
+            }
+
+            const commits = comparison.data.commits;
+            if (commits.length === 0) {
+              console.log('No commits ahead. Nothing to do.');
+              return;
+            }
+
+            console.log(`Found ${commits.length} commits ahead of ${base}`);
+
+            // Build commits table
+            const commitsTable = commits.slice(-30).map(c => {
+              const sha = c.sha.substring(0, 7);
+              const author = c.author ? `@${c.author.login}` : c.commit.author.name;
+              const msg = c.commit.message.split('\n')[0].substring(0, 80);
+              const date = c.commit.author.date.substring(0, 10);
+              return `| \`${sha}\` | ${author} | ${msg} | ${date} |`;
+            }).join('\n');
+
+            const moreCommits = commits.length > 30 ? `\n_... y ${commits.length - 30} commits mas_\n` : '';
+
+            // Categorize commits
+            const categories = { feat: 0, fix: 0, refactor: 0, chore: 0, ci: 0, docs: 0, test: 0, other: 0 };
+            for (const c of commits) {
+              const msg = c.commit.message.toLowerCase();
+              const type = Object.keys(categories).find(t => msg.startsWith(t + ':') || msg.startsWith(t + '('));
+              categories[type || 'other']++;
+            }
+            const categorySummary = Object.entries(categories)
+              .filter(([_, count]) => count > 0)
+              .map(([type, count]) => `**${type}**: ${count}`)
+              .join(' | ');
+
+            const body = `## 🔄 Sync: ${source} → ${base}
+
+            ### Resumen
+            - **${commits.length} commits** pendientes de sincronizar
+            - Tipos: ${categorySummary}
+            - Archivos modificados: ${comparison.data.files?.length || 'N/A'}
+
+            ### Commits
+
+            | SHA | Autor | Mensaje | Fecha |
+            |-----|-------|---------|-------|
+            ${commitsTable}
+            ${moreCommits}
+
+            ---
+            > 🤖 PR generado automaticamente al recibir cambios en \`${source}\`.
+            > Revisar y aprobar para sincronizar \`${base}\`.
+            >
+            > <sub>auto-sync-version: 1.0 | source: ${source} | target: ${base}</sub>`;
+
+            // Check if PR already exists
+            const { data: existingPRs } = await github.rest.pulls.list({
+              owner, repo,
+              head: `${owner}:${source}`,
+              base: base,
+              state: 'open'
+            });
+
+            const autoSyncPR = existingPRs.find(pr =>
+              pr.title.includes('sync:') && pr.title.includes(source)
+            );
+
+            if (autoSyncPR) {
+              // Update existing PR body
+              await github.rest.pulls.update({
+                owner, repo,
+                pull_number: autoSyncPR.number,
+                body: body
+              });
+              console.log(`Updated existing PR #${autoSyncPR.number}`);
+
+              // Ensure label exists
+              try {
+                await github.rest.issues.addLabels({
+                  owner, repo,
+                  issue_number: autoSyncPR.number,
+                  labels: ['auto-sync']
+                });
+              } catch (e) { /* label may already exist */ }
+
+            } else {
+              // Create auto-sync label if it doesn't exist
+              try {
+                await github.rest.issues.createLabel({
+                  owner, repo,
+                  name: 'auto-sync',
+                  color: '0e8a16',
+                  description: 'PR generado automaticamente para sincronizar develop con main'
+                });
+              } catch (e) { /* already exists */ }
+
+              // Create new PR
+              const { data: newPR } = await github.rest.pulls.create({
+                owner, repo,
+                title: `sync: ${source} → ${base}`,
+                head: source,
+                base: base,
+                body: body
+              });
+
+              await github.rest.issues.addLabels({
+                owner, repo,
+                issue_number: newPR.number,
+                labels: ['auto-sync']
+              });
+
+              console.log(`Created PR #${newPR.number}`);
+            }
