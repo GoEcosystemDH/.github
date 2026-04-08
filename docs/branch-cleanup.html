@@ -5264,7 +5264,8 @@ footer{padding:16px 28px;font-size:11px;color:#57606a;border-top:1px solid #d0d7
         <th>Sin Merge</th>
         <th>Naming</th>
         <th>Razón</th>
-        <th>Links</th></tr></thead>
+        <th>Links</th>
+        <th>Confirmar</th></tr></thead>
       <tbody id="tbody-revisar">
       <tr data-repo="admin-referencia" data-accion="REVISAR">
         <td><span style="font-family:monospace;font-size:11px;color:#8b949e">admin_referencia</span></td>
@@ -37091,40 +37092,63 @@ function toggleConfirm(key) {
   renderConfirmed();
 }
 
+function injectRevisarButtons() {
+  document.querySelectorAll('#tbody-revisar tr').forEach(row => {
+    if (row.querySelector('.btn-confirm')) return; // already injected
+    const repo   = row.dataset.repo   || '';
+    const branch = row.querySelector('td:nth-child(3) code')?.textContent || '';
+    const key    = repo + '_' + branch;
+    const td     = document.createElement('td');
+    td.innerHTML = '<button class="btn-confirm" onclick="toggleConfirm(\'' + key + '\')" id="btn_' + key + '">Confirmar</button>';
+    row.appendChild(td);
+  });
+}
+
 function renderConfirmed() {
   const confirmed = getConfirmed();
-  document.querySelectorAll('#tbody-eliminar tr').forEach(row => {
-    const btn = row.querySelector('.btn-confirm');
-    if (!btn) return;
-    const key = btn.id.replace('btn_','');
-    if (confirmed[key]) {
-      btn.textContent = 'Confirmada';
-      btn.classList.add('confirmed');
-      row.classList.add('confirmed');
-    } else {
-      btn.textContent = 'Confirmar';
-      btn.classList.remove('confirmed');
-      row.classList.remove('confirmed');
-    }
+  ['eliminar','revisar'].forEach(panel => {
+    document.querySelectorAll('#tbody-'+panel+' tr').forEach(row => {
+      const btn = row.querySelector('.btn-confirm');
+      if (!btn) return;
+      const key = btn.id.replace('btn_','');
+      if (confirmed[key]) {
+        btn.textContent = 'Confirmada';
+        btn.classList.add('confirmed');
+        row.classList.add('confirmed');
+      } else {
+        btn.textContent = 'Confirmar';
+        btn.classList.remove('confirmed');
+        row.classList.remove('confirmed');
+      }
+    });
   });
-  const count = Object.values(getConfirmed()).filter(Boolean).length;
+  const totalConf = Object.values(getConfirmed()).filter(Boolean).length;
+  const elimConf  = Object.entries(getConfirmed()).filter(([k,v]) => v &&
+    document.getElementById('btn_'+k)?.closest('#tbody-eliminar')).length;
+  const revConf   = totalConf - elimConf;
   document.querySelector('.tab.t-eliminar .cnt').textContent =
-    count > 0 ? `300 (${count} conf.)` : '300';
+    elimConf > 0 ? '300 (' + elimConf + ' conf.)' : '300';
+  document.querySelector('.tab.t-revisar .cnt').textContent =
+    revConf  > 0 ? '653 (' + revConf  + ' conf.)' : '653';
 }
 
 function exportConfirmed() {
   const confirmed = getConfirmed();
   const keys = Object.entries(confirmed).filter(([,v])=>v).map(([k])=>k);
   if (keys.length === 0) { alert('No hay ramas confirmadas aun.'); return; }
-  const lines = ['# Ramas confirmadas para eliminar — ' + new Date().toISOString(), ''];
+  const lines = ['# Ramas confirmadas para eliminar — ' + new Date().toISOString(),
+                 '# Incluye seleccion manual de ELIMINAR y REVISAR', ''];
   keys.forEach(k => {
-    const [repo, ...branchParts] = k.split('_');
-    lines.push('gh api repos/GoEcosystemDH/'+repo+'/git/refs/heads/'+branchParts.join('/') + ' -X DELETE');
+    // key format: repo_branch  (branch may contain /)
+    const firstUnderscore = k.indexOf('_');
+    const repo   = k.substring(0, firstUnderscore);
+    const branch = k.substring(firstUnderscore + 1).replace(/_/g, '/');
+    lines.push('gh api repos/GoEcosystemDH/' + repo + '/git/refs/heads/' + branch + ' -X DELETE');
   });
   const blob = new Blob([lines.join('\n')], {type:'text/plain'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'purga-ramas-20260408.sh';
+  a.download = 'purga-ramas-20260413.sh';
   a.click();
 }
 
@@ -37151,6 +37175,7 @@ function sortTable(th) {
 }
 
 // Init
+injectRevisarButtons();
 renderConfirmed();
 filterTable();
 </script>
