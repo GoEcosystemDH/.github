@@ -92,38 +92,6 @@ footer{padding:16px 28px;font-size:11px;color:#57606a;border-top:1px solid #d0d7
     Purga programada<br><strong style="color:#f85149;font-size:16px">viernes 11 de abril, 2026</strong>
   </div>
 </header>
-
-      <div class="s-title">Auditoria automatica</div>
-      <div class="s-desc">Script detecta inactividad, PRs abiertos y commits sin merge</div>
-    </div>
-    <div class="step active">
-      <div class="s-num">2</div>
-      <div class="s-title">Revision humana</div>
-      <div class="s-desc">DevOps-Infra confirma cada ELIMINAR usando el boton de esta pagina</div>
-    </div>
-    <div class="step">
-      <div class="s-num">3</div>
-      <div class="s-title">Notificacion</div>
-      <div class="s-desc">Avisar a autores 48h antes via Slack/correo</div>
-    </div>
-    <div class="step">
-      <div class="s-num">4</div>
-      <div class="s-title">Escaneo secretos</div>
-      <div class="s-desc">Correr trufflehog/gitleaks en ramas antes de borrar</div>
-    </div>
-    <div class="step warn">
-      <div class="s-num">5</div>
-      <div class="s-title">Purga — 11 abr</div>
-      <div class="s-desc">Solo ramas confirmadas. Guardar SHAs como backup</div>
-    </div>
-    <div class="step">
-      <div class="s-num">6</div>
-      <div class="s-title">Rollback 30d</div>
-      <div class="s-desc">Git objects persisten 30d. Restaurar con SHA si es necesario</div>
-    </div>
-  </div>
-</div>
-
 <!-- Stats -->
 <div class="stats">
   <div class="stat red"><div class="num">300</div><div class="lbl">ELIMINAR</div></div>
