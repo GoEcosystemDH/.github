@@ -37074,6 +37074,51 @@ function filterTable() {
   document.getElementById('countLabel').textContent = visible + ' ramas mostradas';
 }
 
+// Branches manually whitelisted — never delete regardless of classification
+const NEVER_DELETE = [
+  'asm-mobile_release',
+  'asm-mobile_update',
+  'his-angular-sandbox_Alejandro-ParticionCuentas',
+  'his-api-sandbox_Alejandro-ParticionCuentass',
+];
+
+function markProtectedRows() {
+  ['eliminar','revisar'].forEach(panel => {
+    document.querySelectorAll('#tbody-'+panel+' tr').forEach(row => {
+      const repo   = row.dataset.repo || '';
+      const branch = row.querySelector('td:nth-child(3) code')?.textContent || '';
+      const key    = repo + '_' + branch;
+      if (!NEVER_DELETE.includes(key)) return;
+      // Override styling to green (MANTENER)
+      row.dataset.accion = 'MANTENER';
+      row.style.cssText = '';
+      row.querySelectorAll('td').forEach(td => {
+        td.style.background = '#f0fff4';
+      });
+      // Replace confirm button with protected badge
+      const btn = row.querySelector('.btn-confirm');
+      if (btn) {
+        const badge = document.createElement('span');
+        badge.className = 'badge b-ok';
+        badge.title = 'Excluida manualmente — no eliminar';
+        badge.textContent = 'Protegida';
+        btn.replaceWith(badge);
+      }
+    });
+  });
+  // Also mark in TODOS panel
+  document.querySelectorAll('#tbody-todos tr').forEach(row => {
+    const repo   = row.dataset.repo || '';
+    const branch = row.querySelector('td:nth-child(3) code')?.textContent || '';
+    const key    = repo + '_' + branch;
+    if (!NEVER_DELETE.includes(key)) return;
+    row.dataset.accion = 'MANTENER';
+    row.querySelectorAll('td').forEach(td => {
+      td.style.background = '#f0fff4';
+    });
+  });
+}
+
 // Confirm buttons with localStorage
 const STORAGE_KEY = 'goe_branch_confirmed_v2';
 
@@ -37138,7 +37183,9 @@ function exportConfirmed() {
   if (keys.length === 0) { alert('No hay ramas confirmadas aun.'); return; }
   const lines = ['# Ramas confirmadas para eliminar — ' + new Date().toISOString(),
                  '# Incluye seleccion manual de ELIMINAR y REVISAR', ''];
-  keys.forEach(k => {
+  const safeKeys = keys.filter(k => !NEVER_DELETE.includes(k));
+  if (safeKeys.length === 0) { alert('No hay ramas confirmadas (las protegidas no cuentan).'); return; }
+  safeKeys.forEach(k => {
     // key format: repo_branch  (branch may contain /)
     const firstUnderscore = k.indexOf('_');
     const repo   = k.substring(0, firstUnderscore);
@@ -37176,6 +37223,7 @@ function sortTable(th) {
 
 // Init
 injectRevisarButtons();
+markProtectedRows();
 renderConfirmed();
 filterTable();
 </script>
