@@ -1,0 +1,28 @@
+# Gitleaks configuration for GoEcosystemDH
+# Docs: https://github.com/gitleaks/gitleaks#configuration
+
+title = "GoEcosystemDH Gitleaks Config"
+
+# Use the default rules (detects API keys, tokens, passwords, etc.)
+# Add allowlists below for known false positives
+
+[allowlist]
+  description = "Global allowlist for GoEcosystemDH"
+
+  # Ignore test fixtures and example files
+  paths = [
+    '''\.env\.example''',
+    '''\.env\.sample''',
+    '''test[s]?\/.*fixture''',
+    '''mock[s]?\/''',
+    '''__test__\/''',
+  ]
+
+  # Ignore specific known safe patterns
+  regexes = [
+    '''DOCKERHUB_USERNAME''',
+    '''DOCKER_HUB_PASSWORD''',
+    '''GRAFANA_ADMIN_PASSWORD''',
+    '''secrets\.\w+''',
+    '''\$\{\{ secrets\.\w+ \}\}''',
+  ]

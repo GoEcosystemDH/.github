@@ -1,0 +1,6 @@
+{
+  "name": "Gitleaks Secret Scanning",
+  "description": "Detect secrets and credentials in code using Gitleaks",
+  "iconName": "lock",
+  "categories": ["Security"]
+}
