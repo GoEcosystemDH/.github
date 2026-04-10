@@ -16,13 +16,37 @@ title = "GoEcosystemDH Gitleaks Config"
     '''test[s]?\/.*fixture''',
     '''mock[s]?\/''',
     '''__test__\/''',
+    # TCPDF library example certificate (NOT a real key)
+    '''.*tcpdf/examples/data/cert/tcpdf\.crt''',
+    # namshi/jose library test fixtures (NOT real keys)
+    '''vendor[-_0-9]*/namshi/jose/tests/.*\.key''',
+    '''vendor[-_0-9]*/namshi/jose/tests/.*SignerTest\.php''',
+    # Visual Studio metadata (should not be in git but ignore)
+    '''\.vs/config/applicationhost\.config''',
+    # Documentation curl examples
+    '''docs/.*\.md''',
+    '''.*/AUTH_DOCUMENTATION\.md''',
   ]
 
   # Ignore specific known safe patterns
   regexes = [
+    # GitHub Actions secret references
+    '''secrets\.\w+''',
+    '''\$\{\{ secrets\.\w+ \}\}''',
+    # GitHub Actions env variables
     '''DOCKERHUB_USERNAME''',
     '''DOCKER_HUB_PASSWORD''',
     '''GRAFANA_ADMIN_PASSWORD''',
-    '''secrets\.\w+''',
-    '''\$\{\{ secrets\.\w+ \}\}''',
+    # CodeIgniter session/CSRF config names (not secrets themselves)
+    '''ci_session[a-z_]*''',
+    '''sess_cookie_name''',
+    '''csrf_cookie_name''',
+    '''csrf_token_name''',
+    '''encryption_key.*=.*"[^"]*"''',  # the config line itself
+    # Common placeholder patterns
+    '''your[_-]?api[_-]?key[_-]?here''',
+    '''xxxxxxxxxxxx''',
+    '''<your[_-]''',
+    # Example tokens in documentation
+    '''example[_-]?token''',
   ]
