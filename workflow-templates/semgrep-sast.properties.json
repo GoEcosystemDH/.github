@@ -1,0 +1,6 @@
+{
+  "name": "Semgrep SAST",
+  "description": "Static Application Security Testing with Semgrep. Detects OWASP Top 10, CWE Top 25, hardcoded secrets, and common vulnerability patterns in PHP, JS/TS, Python, Go, and more.",
+  "iconName": "shield-lock",
+  "categories": ["Security"]
+}
