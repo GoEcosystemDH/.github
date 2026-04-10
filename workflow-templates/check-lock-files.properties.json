@@ -1,0 +1,6 @@
+{
+  "name": "Check Lock Files",
+  "description": "Validates that dependency lock files exist and are not gitignored. Supports npm, Composer, Go, Python, and Dart.",
+  "iconName": "lock",
+  "categories": ["Security", "Quality"]
+}

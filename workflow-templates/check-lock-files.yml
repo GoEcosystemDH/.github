@@ -1,0 +1,101 @@
+name: Check Lock Files
+
+# Valida que los lock files existan en el repositorio.
+# Si el repo tiene package.json debe tener package-lock.json (o yarn.lock).
+# Si el repo tiene composer.json debe tener composer.lock.
+#
+# Fuente: GoEcosystemDH/.github/workflow-templates/check-lock-files.yml
+# Task: AB#4129
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+
+jobs:
+  check-lock-files:
+    name: Validate lock files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check lock files
+        run: |
+          errors=0
+
+          # Node.js: package.json → package-lock.json or yarn.lock
+          if [ -f "package.json" ]; then
+            if [ ! -f "package-lock.json" ] && [ ! -f "yarn.lock" ] && [ ! -f "pnpm-lock.yaml" ]; then
+              echo "::error::package.json exists but no lock file found (package-lock.json, yarn.lock, or pnpm-lock.yaml). Run 'npm install' and commit package-lock.json."
+              errors=$((errors + 1))
+            else
+              echo "✅ Node.js lock file found"
+            fi
+
+            # Check for duplicate lock files
+            count=0
+            [ -f "package-lock.json" ] && count=$((count + 1))
+            [ -f "yarn.lock" ] && count=$((count + 1))
+            [ -f "pnpm-lock.yaml" ] && count=$((count + 1))
+            if [ "$count" -gt 1 ]; then
+              echo "::warning::Multiple lock files detected. Pick one package manager and remove the others."
+            fi
+          fi
+
+          # PHP: composer.json → composer.lock
+          if [ -f "composer.json" ]; then
+            if [ ! -f "composer.lock" ]; then
+              echo "::error::composer.json exists but composer.lock not found. Run 'composer install' and commit composer.lock."
+              errors=$((errors + 1))
+            else
+              echo "✅ Composer lock file found"
+            fi
+          fi
+
+          # Python: check for any lock mechanism
+          if [ -f "requirements.txt" ] || [ -f "pyproject.toml" ] || [ -f "setup.py" ] || [ -f "Pipfile" ]; then
+            if [ ! -f "requirements.txt" ] && [ ! -f "Pipfile.lock" ] && [ ! -f "poetry.lock" ]; then
+              echo "::warning::Python project detected but no pinned dependencies found (requirements.txt, Pipfile.lock, or poetry.lock)."
+            else
+              echo "✅ Python dependencies pinned"
+            fi
+          fi
+
+          # Go: go.mod → go.sum
+          if [ -f "go.mod" ]; then
+            if [ ! -f "go.sum" ]; then
+              echo "::error::go.mod exists but go.sum not found. Run 'go mod tidy' and commit go.sum."
+              errors=$((errors + 1))
+            else
+              echo "✅ Go sum file found"
+            fi
+          fi
+
+          # Dart/Flutter: pubspec.yaml → pubspec.lock
+          if [ -f "pubspec.yaml" ]; then
+            if [ ! -f "pubspec.lock" ]; then
+              echo "::error::pubspec.yaml exists but pubspec.lock not found. Run 'dart pub get' and commit pubspec.lock."
+              errors=$((errors + 1))
+            else
+              echo "✅ Dart lock file found"
+            fi
+          fi
+
+          # Check .gitignore doesn't block lock files
+          if [ -f ".gitignore" ]; then
+            if grep -qE '^(package-lock\.json|composer\.lock|yarn\.lock|go\.sum|poetry\.lock|pubspec\.lock)$' .gitignore; then
+              echo "::error::.gitignore is blocking a lock file. Lock files MUST be committed. Remove the offending line from .gitignore."
+              errors=$((errors + 1))
+            fi
+          fi
+
+          if [ "$errors" -gt 0 ]; then
+            echo ""
+            echo "❌ Found $errors lock file issue(s). See https://docs.npmjs.com/cli/v10/configuring-npm/package-lock-json and https://getcomposer.org/doc/01-basic-usage.md#commit-your-composer-lock-file-to-version-control"
+            exit 1
+          fi
+
+          echo ""
+          echo "✅ All lock files OK"
