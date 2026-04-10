@@ -1,0 +1,88 @@
+name: Semgrep SAST
+
+# Análisis estático de seguridad (SAST) con Semgrep.
+# Detecta vulnerabilidades comunes: SQL injection, XSS, command injection,
+# path traversal, insecure crypto, hardcoded secrets, SSRF, etc.
+#
+# Cubre: PHP, JavaScript, TypeScript, Python, Go, Java, Ruby, C#
+# Reglas: semgrep community rulesets (OWASP Top 10, CWE Top 25)
+#
+# Fuente: GoEcosystemDH/.github/workflow-templates/semgrep-sast.yml
+# Task: AB#4105
+#
+# IMPORTANTE: durante la fase de adopción, este workflow es NON-BLOCKING
+# (continue-on-error: true). Los hallazgos se reportan como anotaciones
+# en el PR pero no bloquean el merge. Se pasará a blocking cuando los
+# repos críticos estén limpios de hallazgos de severidad HIGH/CRITICAL.
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+  # Escaneo semanal para detectar nuevas reglas/vulnerabilidades
+  schedule:
+    - cron: "30 8 * * 1"
+
+jobs:
+  semgrep:
+    name: Semgrep Security Scan
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    permissions:
+      contents: read
+      security-events: write
+    container:
+      image: semgrep/semgrep
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run Semgrep
+        run: |
+          semgrep scan \
+            --config "p/owasp-top-ten" \
+            --config "p/cwe-top-25" \
+            --config "p/security-audit" \
+            --config "p/secrets" \
+            --sarif \
+            --output semgrep-results.sarif \
+            --error \
+            --verbose \
+            || true
+
+      - name: Upload SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: semgrep-results.sarif
+        continue-on-error: true
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Semgrep SAST Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f semgrep-results.sarif ]; then
+            findings=$(cat semgrep-results.sarif | python3 -c "
+          import sys, json
+          data = json.load(sys.stdin)
+          results = data.get('runs', [{}])[0].get('results', [])
+          high = sum(1 for r in results if r.get('level') == 'error')
+          med = sum(1 for r in results if r.get('level') == 'warning')
+          low = sum(1 for r in results if r.get('level') == 'note')
+          print(f'| Severity | Count |')
+          print(f'|----------|-------|')
+          print(f'| HIGH/ERROR | {high} |')
+          print(f'| MEDIUM/WARNING | {med} |')
+          print(f'| LOW/NOTE | {low} |')
+          print(f'| **Total** | **{high+med+low}** |')
+          " 2>/dev/null || echo "Could not parse results")
+            echo "$findings" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No results file generated." >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Rulesets: owasp-top-ten, cwe-top-25, security-audit, secrets" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Docs: [wiki → Onboarding → Cap 6: Seguridad](https://wiki.goecosystemdh.com/s/onboarding)" >> $GITHUB_STEP_SUMMARY
