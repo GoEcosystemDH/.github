@@ -14,7 +14,7 @@ Go Ecosystem DH es una organización dedicada al desarrollo de soluciones tecnol
 |------|------------|
 | **Backend** | Go, Node.js, .NET |
 | **Frontend** | Angular, React |
-| **Móvil** | Android (Kotlin/Java) |
+| **Móvil** | Android (Kotlin/Java/Flutter) |
 | **Infraestructura** | Docker, Docker Compose, GitHub Actions |
 | **Base de Datos** | SQL Server, PostgreSQL |
 | **CI/CD** | GitHub Actions, Self-hosted Runners |
