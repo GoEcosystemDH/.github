@@ -40,6 +40,7 @@ on:
 jobs:
   build-and-push:
     name: Build y Push imagen Docker
+    if: ${{ github.actor != 'dependabot[bot]' }}
     runs-on: [ self-hosted, ci ]
     outputs:
       tag-commit: ${{ steps.docker-setup.outputs.tag-commit }}
