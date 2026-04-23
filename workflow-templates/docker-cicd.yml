@@ -14,7 +14,7 @@ env:
 jobs:
   build:
     name: Build Docker Image
-    runs-on: [self-hosted, ci]
+    runs-on: [self-hosted, prod, ci]
     outputs:
       tag_commit: ${{ steps.set-tags.outputs.tag_commit }}
       tag_latest: ${{ steps.set-tags.outputs.tag_latest }}
@@ -30,20 +30,28 @@ jobs:
       - name: Generar tags de imagen
         id: set-tags
         run: |
-          TAG_LATEST="${{ env.DOCKER_REGISTRY }}/${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:latest"
           TAG_COMMIT="${{ env.DOCKER_REGISTRY }}/${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ github.ref_name }}-${{ github.sha }}"
           echo "tag_commit=$TAG_COMMIT" >> "$GITHUB_OUTPUT"
-          echo "tag_latest=$TAG_LATEST" >> "$GITHUB_OUTPUT"
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            TAG_LATEST="${{ env.DOCKER_REGISTRY }}/${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:latest"
+            echo "tag_latest=$TAG_LATEST" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag_latest=" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Build imagen Docker
         run: |
-          docker build -t "${{ steps.set-tags.outputs.tag_commit }}" -t "${{ steps.set-tags.outputs.tag_latest }}" .
+          if [ -n "${{ steps.set-tags.outputs.tag_latest }}" ]; then
+            docker build -t "${{ steps.set-tags.outputs.tag_commit }}" -t "${{ steps.set-tags.outputs.tag_latest }}" .
+          else
+            docker build -t "${{ steps.set-tags.outputs.tag_commit }}" .
+          fi
 
   publish:
     name: Publicar imagen a Docker Hub
     if: github.event_name == 'push'
     needs: build
-    runs-on: [self-hosted, ci]
+    runs-on: [self-hosted, prod, ci]
     steps:
       - uses: docker/login-action@v3
         with:
@@ -54,13 +62,15 @@ jobs:
       - name: Push imagen
         run: |
           docker push "${{ needs.build.outputs.tag_commit }}"
-          docker push "${{ needs.build.outputs.tag_latest }}"
+          if [ -n "${{ needs.build.outputs.tag_latest }}" ]; then
+            docker push "${{ needs.build.outputs.tag_latest }}"
+          fi
 
   deploy:
     name: Desplegar con Docker Compose
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    needs: publish
-    runs-on: [self-hosted, cd]
+    needs: [build, publish]
+    runs-on: [self-hosted, prod, cd]
     steps:
       - uses: actions/checkout@v4
 
@@ -72,7 +82,7 @@ jobs:
 
       - name: Actualizar imagen en compose
         run: |
-          sed -i "s|image: .*|image: ${{ needs.publish.outputs.tag_commit }}|g" "${{ env.COMPOSE_FILE }}"
+          sed -i "s|image: .*|image: ${{ needs.build.outputs.tag_commit }}|g" "${{ env.COMPOSE_FILE }}"
 
       - name: Redesplegar servicio
         run: |
@@ -82,9 +92,12 @@ jobs:
   cleanup:
     name: Limpiar imagenes locales
     if: github.event_name == 'push'
-    needs: deploy
-    runs-on: [self-hosted, ci]
+    needs: [build, deploy]
+    runs-on: [self-hosted, prod, ci]
     steps:
       - name: Eliminar imagenes locales
         run: |
-          docker rmi "${{ needs.build.outputs.tag_commit }}" "${{ needs.build.outputs.tag_latest }}" || true
+          docker rmi "${{ needs.build.outputs.tag_commit }}" || true
+          if [ -n "${{ needs.build.outputs.tag_latest }}" ]; then
+            docker rmi "${{ needs.build.outputs.tag_latest }}" || true
+          fi
